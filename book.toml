@@ -1,0 +1,17 @@
+[book]
+authors = ["AlexOv", "DenisRo", "DenisNe"]
+language = "en"
+multilingual = false
+src = "src"
+title = "ai-sstu-2025"
+
+[build]
+build-dir = "book"
+create-missing = true
+
+[preprocessor.drawio]
+command = "mdbook-drawio"
+
+[output.html]
+additional-css = ["src/_assets/custom.css"]
+additional-js = []
