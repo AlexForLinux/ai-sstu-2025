@@ -1,2 +1,5 @@
-# Лабораторная 1
-##### по курсу "Проектирование Интеллектуальных Систем"
+# Проект по курсу "Проектирование Интеллектуальных Систем"
+- Лабораторная 1. - ./src - URL: <https://alexforlinux.github.io/ai-sstu-2025/description.html>
+- Лабораторная 2. - ./dataset - URL: <https://colab.research.google.com/drive/1oMEN5bfms0DFudkMMg4GK-tEwGy_vIsL?usp=sharing>
+- Лабораторная 3. - ...
+- Лабораторная 4. - ...
