@@ -1,15 +1,20 @@
 package com.example.plantdiseasedetector.ui.screens.main
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.navigation.compose.*
 import com.example.myapp.ui.navigation.BottomNavItem
 import androidx.compose.ui.Modifier
-import com.example.plantdiseasedetector.ui.screens.pages.CatalogScreen
-import com.example.plantdiseasedetector.ui.screens.pages.ClassifyScreen
-import com.example.plantdiseasedetector.ui.screens.pages.HistoryScreen
+import com.example.plantdiseasedetector.data.datasource.local.db.TestDataBase
+import com.example.plantdiseasedetector.data.repository.DiseasePreviewRepositoryImpl
+import com.example.plantdiseasedetector.ui.screens.catalog.CatalogScreen
+import com.example.plantdiseasedetector.ui.screens.catalog.DiseasePreviewVM
+import com.example.plantdiseasedetector.ui.screens.classify.ClassifyScreen
+import com.example.plantdiseasedetector.ui.screens.history.HistoryScreen
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -46,7 +51,11 @@ fun MainScreen() {
             startDestination = "catalog",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("catalog") { CatalogScreen() }
+            composable("catalog") {
+                //TODO: Temporary decision
+                val viewModel = DiseasePreviewVM(DiseasePreviewRepositoryImpl(TestDataBase()))
+                CatalogScreen(viewModel)
+            }
             composable("class") { ClassifyScreen() }
             composable("history") { HistoryScreen() }
         }

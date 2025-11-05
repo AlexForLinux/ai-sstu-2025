@@ -1,4 +1,4 @@
-package com.example.plantdiseasedetector.ui.screens.pages
+package com.example.plantdiseasedetector.ui.screens.history
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme

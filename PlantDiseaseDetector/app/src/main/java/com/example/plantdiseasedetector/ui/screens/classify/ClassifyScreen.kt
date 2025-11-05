@@ -1,4 +1,4 @@
-package com.example.plantdiseasedetector.ui.screens.pages
+package com.example.plantdiseasedetector.ui.screens.classify
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CatalogScreen() {
+fun ClassifyScreen() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        Text("Каталог", style = MaterialTheme.typography.headlineMedium)
+        Text("Диагностика", style = MaterialTheme.typography.headlineMedium)
     }
 }
