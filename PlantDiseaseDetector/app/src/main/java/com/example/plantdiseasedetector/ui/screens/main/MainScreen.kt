@@ -7,17 +7,24 @@ import androidx.compose.runtime.*
 import androidx.navigation.compose.*
 import com.example.myapp.ui.navigation.BottomNavItem
 import androidx.compose.ui.Modifier
-import com.example.plantdiseasedetector.data.datasource.local.db.TestDataBase
-import com.example.plantdiseasedetector.data.repository.DiseasePreviewRepositoryImpl
+import androidx.compose.ui.platform.LocalContext
+import com.example.plantdiseasedetector.data.datasource.local.db.LocalDataBase
+import com.example.plantdiseasedetector.data.repository.DiseaseRepositoryImpl
 import com.example.plantdiseasedetector.ui.screens.catalog.CatalogScreen
-import com.example.plantdiseasedetector.ui.screens.catalog.DiseasePreviewVM
+import com.example.plantdiseasedetector.ui.screens.catalog.DiseaseVM
 import com.example.plantdiseasedetector.ui.screens.classify.ClassifyScreen
 import com.example.plantdiseasedetector.ui.screens.history.HistoryScreen
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun MainScreen() {
+
+    //TODO: Temporary decision
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     val navController = rememberNavController()
+    val localDataBase = LocalDataBase.getDatabase(context, scope)
 
     val items = listOf(
         BottomNavItem.Catalog,
@@ -53,7 +60,7 @@ fun MainScreen() {
         ) {
             composable("catalog") {
                 //TODO: Temporary decision
-                val viewModel = DiseasePreviewVM(DiseasePreviewRepositoryImpl(TestDataBase()))
+                val viewModel = DiseaseVM(DiseaseRepositoryImpl(localDataBase.diseaseDao))
                 CatalogScreen(viewModel)
             }
             composable("class") { ClassifyScreen() }
