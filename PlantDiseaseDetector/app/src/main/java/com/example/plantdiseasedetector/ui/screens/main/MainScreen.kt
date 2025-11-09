@@ -8,9 +8,13 @@ import androidx.navigation.compose.*
 import com.example.myapp.ui.navigation.BottomNavItem
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.plantdiseasedetector.data.datasource.local.db.LocalDataBase
 import com.example.plantdiseasedetector.data.repository.DiseaseRepositoryImpl
 import com.example.plantdiseasedetector.ui.screens.catalog.CatalogScreen
+import com.example.plantdiseasedetector.ui.screens.catalog.DiseaseDetailScreen
 import com.example.plantdiseasedetector.ui.screens.catalog.DiseaseVM
 import com.example.plantdiseasedetector.ui.screens.classify.ClassifyScreen
 import com.example.plantdiseasedetector.ui.screens.history.HistoryScreen
@@ -58,10 +62,22 @@ fun MainScreen() {
             startDestination = "catalog",
             modifier = Modifier.padding(innerPadding)
         ) {
+            val viewModel = DiseaseVM(DiseaseRepositoryImpl(localDataBase.diseaseDao))
             composable("catalog") {
                 //TODO: Temporary decision
-                val viewModel = DiseaseVM(DiseaseRepositoryImpl(localDataBase.diseaseDao))
-                CatalogScreen(viewModel)
+                CatalogScreen(
+                    viewModel = viewModel,
+                    onDiseaseClick = { disease ->
+                        navController.navigate("detail/${disease.id}")
+                    }
+                )
+            }
+            composable(
+                route = "detail/{diseaseId}",
+                arguments = listOf(navArgument("diseaseId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val diseaseId = backStackEntry.arguments?.getInt("diseaseId")
+                DiseaseDetailScreen(diseaseId = diseaseId, viewModel = viewModel)
             }
             composable("class") { ClassifyScreen() }
             composable("history") { HistoryScreen() }

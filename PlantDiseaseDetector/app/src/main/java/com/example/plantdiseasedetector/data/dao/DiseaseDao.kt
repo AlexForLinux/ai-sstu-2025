@@ -11,6 +11,9 @@ interface DiseaseDao {
     @Query("SELECT * FROM diseases")
     fun getDiseases() : Flow<List<Disease>>
 
+    @Query("SELECT * FROM diseases where id = :id")
+    fun getDiseaseById(id: Int?) : Flow<Disease>
+
     @Insert
     suspend fun insertDisease(disease: Disease)
 }

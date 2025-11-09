@@ -1,5 +1,6 @@
 package com.example.plantdiseasedetector.ui.screens.catalog
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,7 @@ import com.example.plantdiseasedetector.data.model.Disease
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatalogScreen(viewModel: DiseaseVM) {
+fun CatalogScreen(viewModel: DiseaseVM, onDiseaseClick: (Disease) -> Unit) {
 
     val diseases : List<Disease> = viewModel.diseases.collectAsState().value
 
@@ -37,7 +38,8 @@ fun CatalogScreen(viewModel: DiseaseVM) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp),
+                        .padding(vertical = 4.dp)
+                        .clickable { onDiseaseClick(disease) },
                     elevation = CardDefaults.cardElevation(4.dp)
                 ) {
                     Text(

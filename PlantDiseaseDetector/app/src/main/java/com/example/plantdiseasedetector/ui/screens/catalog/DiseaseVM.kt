@@ -13,4 +13,7 @@ class DiseaseVM (
 ) : ViewModel() {
     val diseases: StateFlow<List<Disease>> = repository.getDiseases()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    fun getDiseaseById(id: Int?): StateFlow<Disease?> = repository.getDiseaseById(id)
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 }
