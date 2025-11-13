@@ -10,10 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseVM) {
+fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseVM = hiltViewModel()) {
     val disease = viewModel.getDiseaseById(diseaseId).collectAsState(initial = null).value
 
     Scaffold(

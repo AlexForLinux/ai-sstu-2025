@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.plantdiseasedetector.ui.screens.main.MainScreen
 import com.example.plantdiseasedetector.ui.theme.PlantDiseaseDetectorTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +19,7 @@ import com.example.plantdiseasedetector.ui.theme.PlantDiseaseDetectorTheme
 //    }
 //}
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

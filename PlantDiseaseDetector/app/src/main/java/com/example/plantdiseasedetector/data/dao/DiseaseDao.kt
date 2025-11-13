@@ -16,4 +16,7 @@ interface DiseaseDao {
 
     @Insert
     suspend fun insertDisease(disease: Disease)
+
+    @Query("SELECT * FROM diseases")
+    suspend fun getAllDiseasesOnce(): List<Disease>
 }

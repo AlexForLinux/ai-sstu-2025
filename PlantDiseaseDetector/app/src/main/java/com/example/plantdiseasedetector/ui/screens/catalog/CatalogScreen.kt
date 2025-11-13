@@ -17,11 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.plantdiseasedetector.data.model.Disease
+import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatalogScreen(viewModel: DiseaseVM, onDiseaseClick: (Disease) -> Unit) {
+fun CatalogScreen(
+    onDiseaseClick: (Disease) -> Unit,
+    viewModel: DiseaseVM = hiltViewModel())
+{
 
     val diseases : List<Disease> = viewModel.diseases.collectAsState().value
 
