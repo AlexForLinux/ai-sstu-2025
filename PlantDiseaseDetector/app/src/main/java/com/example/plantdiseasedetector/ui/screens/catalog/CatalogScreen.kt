@@ -21,14 +21,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+
 import androidx.compose.ui.unit.sp
 import com.example.plantdiseasedetector.R
 import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.ui.components.DiseaseCard
 import com.example.plantdiseasedetector.ui.components.PlantTopBar
 
+import androidx.hilt.navigation.compose.hiltViewModel
+
+import dagger.hilt.android.AndroidEntryPoint
+
+
 @Composable
-fun CatalogScreen(viewModel: DiseaseVM, onDiseaseClick: (Disease) -> Unit) {
+fun CatalogScreen(
+    onDiseaseClick: (Disease) -> Unit,
+    viewModel: DiseaseVM = hiltViewModel())
+{
 
     val diseases : List<Disease> = viewModel.diseases.collectAsState().value
 

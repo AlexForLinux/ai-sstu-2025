@@ -11,10 +11,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.plantdiseasedetector.ui.components.PlantTopBar
-
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseVM) {
+fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseVM = hiltViewModel()) {
     val disease = viewModel.getDiseaseById(diseaseId).collectAsState(initial = null).value
 
     Scaffold(

@@ -32,7 +32,6 @@ fun MainScreen() {
     val scope = rememberCoroutineScope()
 
     val navController = rememberNavController()
-    val localDataBase = LocalDataBase.getDatabase(context, scope)
 
     val items = listOf(
         BottomNavItem.Catalog,
@@ -84,11 +83,9 @@ fun MainScreen() {
             startDestination = "catalog",
             modifier = Modifier.padding(innerPadding)
         ) {
-            val viewModel = DiseaseVM(DiseaseRepositoryImpl(localDataBase.diseaseDao))
             composable("catalog") {
                 //TODO: Temporary decision
                 CatalogScreen(
-                    viewModel = viewModel,
                     onDiseaseClick = { disease ->
                         navController.navigate("detail/${disease.id}")
                     }
@@ -99,7 +96,7 @@ fun MainScreen() {
                 arguments = listOf(navArgument("diseaseId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val diseaseId = backStackEntry.arguments?.getInt("diseaseId")
-                DiseaseDetailScreen(diseaseId = diseaseId, viewModel = viewModel)
+                DiseaseDetailScreen(diseaseId = diseaseId)
             }
             composable("class") {
                 val viewModel = ClassifyVM()
