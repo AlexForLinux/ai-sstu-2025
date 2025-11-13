@@ -99,8 +99,7 @@ fun MainScreen() {
                 DiseaseDetailScreen(diseaseId = diseaseId)
             }
             composable("class") {
-                val viewModel = ClassifyVM()
-                ClassifyScreen(viewModel)
+                ClassifyScreen()
             }
             composable("history") { HistoryScreen() }
         }

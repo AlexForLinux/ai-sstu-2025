@@ -57,10 +57,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.plantdiseasedetector.R
 import com.example.plantdiseasedetector.ui.components.PlantTopBar
+import com.example.plantdiseasedetector.ui.screens.catalog.DiseaseVM
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -75,7 +77,7 @@ fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
 }
 @Composable
 fun ClassifyScreen(
-    viewModel: ClassifyVM
+    viewModel: ClassifyVM = hiltViewModel()
 ) {
     val context = LocalContext.current
 
