@@ -10,29 +10,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.plantdiseasedetector.ui.components.PlantTopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseVM) {
     val disease = viewModel.getDiseaseById(diseaseId).collectAsState(initial = null).value
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(disease?.title ?: "Детали заболевания") }) }
+        topBar = {
+            PlantTopBar("Диагноз", 16)
+        }
     ) { padding ->
-        if (disease != null) {
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .padding(16.dp)
-            ) {
+
+        Column(
+            modifier = Modifier
+                .padding(padding)
+        ) {
+            if (disease != null) {
                 Text(text = "Название: ${disease.title}")
                 Text(text = "Описание: ${disease.shortDesc}")
             }
-        } else {
-            Text(
-                text = "Загрузка данных...",
-                modifier = Modifier.padding(16.dp)
-            )
+            else {
+                Text(text = "Загрузка данных...")
+            }
         }
     }
 }
