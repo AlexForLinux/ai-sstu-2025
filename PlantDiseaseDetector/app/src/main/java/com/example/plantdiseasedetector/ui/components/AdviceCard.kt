@@ -71,9 +71,8 @@ fun AdviceCard(
                     modifier = Modifier
                         .weight(1f)
                         .padding(top = 4.dp),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
