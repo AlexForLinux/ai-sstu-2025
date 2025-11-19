@@ -13,24 +13,28 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 interface ClassifyRepository {
-    fun predict(bitmap: Bitmap): Flow<List<Prediction>>
+    fun predict(bitmap: Bitmap?): Flow<List<Prediction>>
 }
 
 class ClassifyRepositoryImpl @Inject constructor (
     private val plantDiseaseAI: PlantDiseaseAI,
 ) : ClassifyRepository {
 
-    override fun predict(bitmap: Bitmap): Flow<List<Prediction>> = flow {
+    override fun predict(bitmap: Bitmap?): Flow<List<Prediction>> = flow {
 
-        val classNames = plantDiseaseAI.getClassNames()
-        val scores = plantDiseaseAI.classifyByBitmap(bitmap)
-
-        val result = classNames.indices.map { i ->
-            Prediction(classNames[i], scores[i] * 100)
+        if (bitmap == null){
+            throw IllegalArgumentException("Получено пустое изображение")
         }
+        else {
+            val classNames = plantDiseaseAI.getClassNames()
+            val scores = plantDiseaseAI.classifyByBitmap(bitmap)
 
-        val sorted = result.sortedByDescending { it.precision }
-        emit(sorted.take(3))
+            val result = classNames.indices.map { i ->
+                Prediction(classNames[i], scores[i] * 100)
+            }
 
+            val sorted = result.sortedByDescending { it.precision }
+            emit(sorted.take(3))
+        }
     }.flowOn(Dispatchers.Default)
 }

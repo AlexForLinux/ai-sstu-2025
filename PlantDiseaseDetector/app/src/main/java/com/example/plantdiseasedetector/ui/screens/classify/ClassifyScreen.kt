@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,8 +43,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.plantdiseasedetector.R
+import com.example.plantdiseasedetector.ui.components.ErrorCard
+import com.example.plantdiseasedetector.ui.components.LoadingBox
 
 fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
     return try {
@@ -58,8 +62,8 @@ fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
 fun ClassifyScreen(
     viewModel: ClassifyVM = hiltViewModel()
 ) {
-    val predictions by viewModel.predict().collectAsState()
-    var showPredictions by remember { mutableStateOf(false) }
+    val predictionsState by viewModel.predictionsState.collectAsState()
+
     val context = LocalContext.current
 
     val galleryLauncher = rememberLauncherForActivityResult(
@@ -68,17 +72,13 @@ fun ClassifyScreen(
         uri?.let {
             val bitmap = uriToBitmap(context, it)
             viewModel.setBitmap(bitmap)
-            showPredictions = false
         }
     }
 
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
-        if (bitmap != null) {
-            viewModel.setBitmap(bitmap)
-            showPredictions = false
-        }
+        viewModel.setBitmap(bitmap)
     }
 
     Column (
@@ -104,9 +104,9 @@ fun ClassifyScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            if (viewModel.selectedImageBitmap != null) {
+            if (viewModel.loadedBitmap != null) {
                 AsyncImage(
-                    model = viewModel.selectedImageBitmap,
+                    model = viewModel.loadedBitmap,
                     contentDescription = "Выбранное фото",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -119,7 +119,7 @@ fun ClassifyScreen(
                 )
             }
 
-            Row (
+            Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(12.dp),
@@ -158,20 +158,45 @@ fun ClassifyScreen(
                     )
                 }
             }
+        }
 
-            Button(
-                onClick = {
-                    showPredictions = true
-                },
-                modifier = Modifier.width(288.dp),
-                enabled = viewModel.selectedImageBitmap != null
-            ) {
-                Text("Диагностика")
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                viewModel.predict()
+            },
+            modifier = Modifier.width(288.dp),
+            enabled = viewModel.loadedBitmap != null
+        ) {
+            Text("Диагностика")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        when(val state = predictionsState){
+            PredictionDataState.EmptyData -> {}
+            is PredictionDataState.Loading -> {
+                LoadingBox()
             }
+            is PredictionDataState.Error -> {
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
 
-            Spacer(modifier = Modifier.height(16.dp))
+                ) {
+                    ErrorCard(
+                        title = "Ошибка обработки изображения",
+                        description = state.message
+                    )
+                }
+            }
+            is PredictionDataState.Success -> {
+                val predictions = state.item
 
-            if (showPredictions && predictions.isNotEmpty()) {
                 Column(
                     modifier = Modifier.width(288.dp)
                 ) {
