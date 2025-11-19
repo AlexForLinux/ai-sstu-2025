@@ -1,8 +1,10 @@
 package com.example.plantdiseasedetector.ui.screens.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.plantdiseasedetector.ui.components.AdviceCard
+import com.example.plantdiseasedetector.ui.components.ErrorCard
+import com.example.plantdiseasedetector.ui.components.LoadingBox
 
 @Composable
 fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseDetailVM = hiltViewModel()) {
@@ -45,8 +49,18 @@ fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseDetailVM = hiltViewMo
     ) {
         when (val state = diseaseState) {
             is DiseaseDataState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                )
+                {
+                    LoadingBox(size = 96.dp)
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
-                    text = "Loading...",
+                    text = "Загрузка ...",
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(bottom = 8.dp),
@@ -54,13 +68,19 @@ fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseDetailVM = hiltViewMo
                 )
             }
             is DiseaseDataState.Error -> {
-                Text(
-                    text = state.message,
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center
-                )
+                Row (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+
+                ) {
+                    ErrorCard(
+                        title = "Ошибка загрузки данных",
+                        description = state.message
+                    )
+                }
             }
             is DiseaseDataState.Success -> {
                 val disease = state.item
