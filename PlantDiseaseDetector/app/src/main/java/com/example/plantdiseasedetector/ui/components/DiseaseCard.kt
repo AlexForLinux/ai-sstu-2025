@@ -33,15 +33,14 @@ fun DiseaseCard(
     imageRes: Int,
     title: String,
     description: String,
-    onNavigateClick: () -> Unit
+    onNavigateClick: () -> Unit,
+    modifier : Modifier = Modifier
 ) {
 
     var isMarked by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier = modifier
     ) {
         Card(
             modifier = Modifier

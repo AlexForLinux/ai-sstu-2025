@@ -1,8 +1,14 @@
 package com.example.plantdiseasedetector.ui.screens.main
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.navigation.compose.*
@@ -11,19 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.example.plantdiseasedetector.data.datasource.local.db.LocalDataBase
-import com.example.plantdiseasedetector.data.repository.DiseaseRepositoryImpl
 import com.example.plantdiseasedetector.ui.screens.catalog.CatalogScreen
-import com.example.plantdiseasedetector.ui.screens.catalog.DiseaseDetailScreen
-import com.example.plantdiseasedetector.ui.screens.catalog.DiseaseVM
+import com.example.plantdiseasedetector.ui.screens.detail.DiseaseDetailScreen
 import com.example.plantdiseasedetector.ui.screens.classify.ClassifyScreen
-import com.example.plantdiseasedetector.ui.screens.classify.ClassifyVM
 import com.example.plantdiseasedetector.ui.screens.history.HistoryScreen
 
-@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun MainScreen() {
 
@@ -40,6 +40,14 @@ fun MainScreen() {
     )
 
     Scaffold(
+        topBar = {
+            Box(
+                modifier = Modifier
+                    .height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
+                    .background(color = MaterialTheme.colorScheme.primary)
+                    .fillMaxWidth()
+            )
+        },
         bottomBar = {
             NavigationBar (
                 containerColor = MaterialTheme.colorScheme.primary,
