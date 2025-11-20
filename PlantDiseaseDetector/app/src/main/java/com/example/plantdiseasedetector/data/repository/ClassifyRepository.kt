@@ -4,37 +4,72 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.example.plantdiseasedetector.data.dao.DiseaseDao
 import com.example.plantdiseasedetector.data.datasource.local.ai.PlantDiseaseAI
-import com.example.plantdiseasedetector.data.model.Disease
-import com.example.plantdiseasedetector.data.model.Prediction
+import com.example.plantdiseasedetector.data.model.DiseasePrecision
+import com.example.plantdiseasedetector.data.model.ExpandDiseasePrecision
+import com.example.plantdiseasedetector.data.model.ModelPrediction
+import com.example.plantdiseasedetector.data.model.PrecisionLevel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 interface ClassifyRepository {
-    fun predict(bitmap: Bitmap?): Flow<List<Prediction>>
+    fun predict(bitmap: Bitmap?): Flow<ModelPrediction>
 }
 
 class ClassifyRepositoryImpl @Inject constructor (
     private val plantDiseaseAI: PlantDiseaseAI,
+    private val diseaseDao: DiseaseDao
 ) : ClassifyRepository {
 
-    override fun predict(bitmap: Bitmap?): Flow<List<Prediction>> = flow {
+    override fun predict(bitmap: Bitmap?): Flow<ModelPrediction>  {
 
         if (bitmap == null){
             throw IllegalArgumentException("Получено пустое изображение")
         }
         else {
-            val classNames = plantDiseaseAI.getClassNames()
-            val scores = plantDiseaseAI.classifyByBitmap(bitmap)
+            val diseasePrecisions = plantDiseaseAI.classifyByBitmap(bitmap)
+            val top1Answer = diseasePrecisions[0]
 
-            val result = classNames.indices.map { i ->
-                Prediction(classNames[i], scores[i] * 100)
+            var topAnswers : List<DiseasePrecision>?;
+            var precisionLevel : PrecisionLevel?;
+
+            if (top1Answer.precision >= 0.80f){
+                topAnswers = diseasePrecisions.take(1)
+                precisionLevel = PrecisionLevel.HIGH
+            }
+            else if (top1Answer.precision >= 0.50f) {
+                topAnswers = diseasePrecisions.take(2)
+                precisionLevel = PrecisionLevel.MEDIUM
+            }
+            else {
+                topAnswers = diseasePrecisions.take(3)
+                precisionLevel = PrecisionLevel.LOW
             }
 
-            val sorted = result.sortedByDescending { it.precision }
-            emit(sorted.take(3))
+            return diseaseDao.getDiseaseByIds(
+                topAnswers.map {it.diseaseId}
+            ).map { diseases ->
+
+                val expandDiseasePrecisions =
+                topAnswers.map { precision ->
+                    val disease = diseases.find { disease ->  disease.id == precision.diseaseId }
+
+                    if (disease == null){
+                        return@map ExpandDiseasePrecision(precision, "Здоровое растение")
+                    }
+                    else {
+                        return@map ExpandDiseasePrecision(precision, disease.name)
+                    }
+                }
+
+                return@map ModelPrediction(
+                    precisionLevel,
+                    expandDiseasePrecisions
+                )
+            }
         }
-    }.flowOn(Dispatchers.Default)
+    }
 }

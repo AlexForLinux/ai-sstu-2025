@@ -1,24 +1,21 @@
 package com.example.plantdiseasedetector.data.datasource.local.ai
 
-import android.content.Context
 import android.graphics.Bitmap
-import androidx.core.graphics.get
 import androidx.core.graphics.scale
+import com.example.plantdiseasedetector.data.model.DiseasePrecision
 import org.pytorch.IValue
 import org.pytorch.Module
 import org.pytorch.Tensor
 import org.pytorch.torchvision.TensorImageUtils
-import java.io.File
 
 class PlantDiseaseAIImpl (
-    modelFile: String
+    modelFile: String,
+    val width: Int = 224,
+    val height: Int = 224,
+    val mean: FloatArray = floatArrayOf(0.4230f, 0.5228f, 0.3154f),
+    val std: FloatArray = floatArrayOf(0.1991f, 0.1988f, 0.1910f),
+    val classes: Array<String> = arrayOf("healthy", "powdery", "rust", "slug", "spot")
 ) : PlantDiseaseAI {
-    val width = 224
-    val height = 224
-
-    val mean = floatArrayOf(0.4230f, 0.5228f, 0.3154f)
-    val std = floatArrayOf(0.1991f, 0.1988f, 0.1910f)
-
     val module: Module = Module.load(modelFile)
 
     private fun bitmapToFloatTensor(bitmap: Bitmap): Tensor {
@@ -39,15 +36,15 @@ class PlantDiseaseAIImpl (
         return exp.map { it / sum }.toFloatArray()
     }
 
-    override fun classifyByBitmap(bitmap: Bitmap) : FloatArray {
+    override fun classifyByBitmap(bitmap: Bitmap) : List<DiseasePrecision> {
         val inputTensor = bitmapToFloatTensor(bitmap)
         val outputTensor = module.forward(IValue.from(inputTensor)).toTensor()
 
-        val scores = outputTensor.dataAsFloatArray
-        return softmax(scores)
-    }
+        val scores = softmax(outputTensor.dataAsFloatArray)
+        val predictionList = scores.mapIndexed { idx, score ->
+            DiseasePrecision(classes[idx], score)
+        }
 
-    override fun getClassNames() : Array<String> {
-        return arrayOf("Healthy", "Powdery", "Rust", "Slug", "Spot")
+        return predictionList.sortedBy { - it.precision }
     }
 }

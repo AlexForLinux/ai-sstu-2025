@@ -4,10 +4,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,21 +51,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.plantdiseasedetector.R
+import com.example.plantdiseasedetector.data.model.Disease
+import com.example.plantdiseasedetector.data.model.PrecisionLevel
 import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.LoadingBox
+import com.example.plantdiseasedetector.ui.components.PrecisionPieChart
+import com.example.plantdiseasedetector.ui.components.TextWithLinks
+import com.example.plantdiseasedetector.ui.functions.generateGreenColors
+import com.example.plantdiseasedetector.ui.functions.uriToBitmap
 
-fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
-    return try {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        BitmapFactory.decodeStream(inputStream)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
 @Composable
 fun ClassifyScreen(
-    viewModel: ClassifyVM = hiltViewModel()
+    viewModel: ClassifyVM = hiltViewModel(),
+    onDiseaseClick: (String) -> Unit
 ) {
     val predictionsState by viewModel.predictionsState.collectAsState()
 
@@ -87,7 +90,7 @@ fun ClassifyScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Диагностика",
+            text = "ИИ-Диагностика",
             style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -99,6 +102,11 @@ fun ClassifyScreen(
             modifier = Modifier
                 .size(288.dp)
                 .clip(RoundedCornerShape(16.dp))
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.primary,
+                    RoundedCornerShape(16.dp)
+                )
                 .background(
                     MaterialTheme.colorScheme.primaryContainer
                 ),
@@ -113,9 +121,10 @@ fun ClassifyScreen(
                 )
             } else {
                 Text(
-                    text = "Выберите изображение",
+                    text = "Выберите изображение для анализа ИИ-моделью",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Center
                 )
             }
 
@@ -172,11 +181,10 @@ fun ClassifyScreen(
             Text("Диагностика")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         when(val state = predictionsState){
             PredictionDataState.EmptyData -> {}
             is PredictionDataState.Loading -> {
+                Spacer(modifier = Modifier.height(16.dp))
                 LoadingBox()
             }
             is PredictionDataState.Error -> {
@@ -195,66 +203,129 @@ fun ClassifyScreen(
                 }
             }
             is PredictionDataState.Success -> {
-                val predictions = state.item
+                val modelPrediction = state.item
+                val precisions = modelPrediction.precisions
+                val myColors = generateGreenColors(precisions.size)
 
                 Column(
-                    modifier = Modifier.width(288.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
                     Text(
                         "Результаты диагностики",
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineSmall
                     )
-                    LazyColumn (
-                        modifier = Modifier.fillMaxWidth(),
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Card (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.background
+                        ),
                     ) {
-                        items(predictions.size) { idx ->
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 4.dp, horizontal = 8.dp)
+                                .fillMaxWidth()
+                        )
+                        {
+                            val diseases = (precisions.associate { precision ->
+                                precision.diseaseId to precision.name
+                            } - "healthy")
 
-                            Row (
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
+                            when (state.item.precisionLevel) {
 
-                            ) {
-                                Row (
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(32.dp)
-                                            .clip(RoundedCornerShape(16.dp))
-                                            .background(
-                                                MaterialTheme.colorScheme.primary
-                                            ),
-                                        contentAlignment = Alignment.Center
-                                    ){
-                                        Text(
-                                            (idx + 1).toString(),
-                                            color = MaterialTheme.colorScheme.onPrimary
-                                        )
-                                    }
-
-                                    Spacer(modifier = Modifier.width(8.dp))
-
-                                    Text(predictions[idx].diseaseClass)
+                                PrecisionLevel.HIGH -> {
+                                    TextWithLinks(
+                                        "Вероятный диагноз: ${precisions[0].name}",
+                                        diseases,
+                                        onDiseaseClick = { s -> onDiseaseClick(s) },
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        textAlign = TextAlign.Justify
+                                    )
                                 }
 
-                                Box(
-                                    modifier = Modifier
-                                        .height(32.dp)
-                                        .width(80.dp)
-                                        .clip(RoundedCornerShape(16.dp))
-                                        .background(
-                                            MaterialTheme.colorScheme.primary
-                                        ),
-                                    contentAlignment = Alignment.Center,
-                                ){
-                                    Text(
-                                        "${"%.2f".format(predictions[idx].precision)}%",
-                                        color = MaterialTheme.colorScheme.onPrimary
+                                PrecisionLevel.MEDIUM -> {
+                                    TextWithLinks(
+                                        "Вероятный диагноз: ${precisions[0].name}\n" +
+                                                "Однако есть основания для другого диагноза: ${precisions[1].name}",
+                                        diseases,
+                                        onDiseaseClick = { s -> onDiseaseClick(s) },
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        textAlign = TextAlign.Justify
                                     )
+                                }
+
+                                PrecisionLevel.LOW -> {
+                                    Text(
+                                        "Не удалось однозначно определить диагноз. Попробуйте сделать фотограию при лучшем освещении или с другого ракурса.",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        textAlign = TextAlign.Justify
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    Card (
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            PrecisionPieChart(
+                                precisions.map { it.precision },
+                                modifier = Modifier.size(128.dp),
+                                defaultColors = myColors,
+                            )
+
+                            Spacer(Modifier.width(8.dp))
+
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                precisions.forEachIndexed { idx, precision ->
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+
+                                    ) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(28.dp)
+                                                    .clip(RoundedCornerShape(16.dp))
+                                                    .background(
+                                                        myColors[idx]
+                                                    ),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text(
+                                                    (idx + 1).toString(),
+                                                    color = MaterialTheme.colorScheme.onPrimary
+                                                )
+                                            }
+
+                                            Spacer(modifier = Modifier.width(4.dp))
+
+                                            Text(precision.name)
+                                        }
+                                    }
                                 }
                             }
                         }
