@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 interface DiseaseRepository {
     fun getDiseases(): Flow<List<Disease>>
-    fun getDiseaseById(id: Int?): Flow<Disease?>
+    fun getDiseaseById(id: String?): Flow<Disease?>
 }
 
 class DiseaseRepositoryImpl @Inject constructor (
@@ -17,7 +17,7 @@ class DiseaseRepositoryImpl @Inject constructor (
         return diseaseDao.getDiseases()
     }
 
-    override fun getDiseaseById(id: Int?): Flow<Disease?> {
+    override fun getDiseaseById(id: String?): Flow<Disease?> {
         return diseaseDao.getDiseaseById(id)
     }
 }

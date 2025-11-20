@@ -33,7 +33,7 @@ import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.LoadingBox
 
 @Composable
-fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseDetailVM = hiltViewModel()) {
+fun DiseaseDetailScreen(diseaseId: String?, viewModel: DiseaseDetailVM = hiltViewModel()) {
 
     val diseaseState by viewModel.diseaseState.collectAsState()
 
@@ -77,7 +77,7 @@ fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseDetailVM = hiltViewMo
 
                 ) {
                     ErrorCard(
-                        title = "Ошибка загрузки данных",
+                        title = "Ошибка загрузки данных: ",
                         description = state.message
                     )
                 }
@@ -88,7 +88,7 @@ fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseDetailVM = hiltViewMo
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = disease.title,
+                    text = disease.name,
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(bottom = 8.dp),
@@ -105,7 +105,7 @@ fun DiseaseDetailScreen(diseaseId: Int?, viewModel: DiseaseDetailVM = hiltViewMo
                 }
 
                 Text(
-                    text = disease.shortDesc,
+                    text = disease.description,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,

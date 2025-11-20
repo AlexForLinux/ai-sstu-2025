@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.plantdiseasedetector.ui.screens.catalog.CatalogScreen
 import com.example.plantdiseasedetector.ui.screens.detail.DiseaseDetailScreen
 import com.example.plantdiseasedetector.ui.screens.classify.ClassifyScreen
@@ -101,13 +102,17 @@ fun MainScreen() {
             }
             composable(
                 route = "detail/{diseaseId}",
-                arguments = listOf(navArgument("diseaseId") { type = NavType.IntType })
+                arguments = listOf(navArgument("diseaseId") { type = NavType.StringType }),
             ) { backStackEntry ->
-                val diseaseId = backStackEntry.arguments?.getInt("diseaseId")
+                val diseaseId = backStackEntry.arguments?.getString("diseaseId")
                 DiseaseDetailScreen(diseaseId = diseaseId)
             }
             composable("class") {
-                ClassifyScreen()
+                ClassifyScreen(
+                    onDiseaseClick = { id ->
+                        navController.navigate("detail/${id}")
+                    }
+                )
             }
             composable("history") { HistoryScreen() }
         }

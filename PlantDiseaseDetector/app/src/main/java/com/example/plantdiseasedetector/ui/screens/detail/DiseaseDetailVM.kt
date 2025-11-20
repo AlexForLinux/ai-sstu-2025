@@ -1,5 +1,6 @@
 package com.example.plantdiseasedetector.ui.screens.detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantdiseasedetector.data.model.Disease
@@ -20,8 +21,9 @@ class DiseaseDetailVM @Inject constructor (
     private val _diseaseState = MutableStateFlow<DiseaseDataState>(DiseaseDataState.Loading)
     val diseaseState: StateFlow<DiseaseDataState> = _diseaseState.asStateFlow()
 
-    fun loadDisease(diseaseId: Int?) {
+    fun loadDisease(diseaseId: String?) {
         viewModelScope.launch {
+            Log.i("TAG", diseaseId.toString())
             repository.getDiseaseById(diseaseId)
             .catch { exception ->
                 _diseaseState.value = DiseaseDataState.Error(

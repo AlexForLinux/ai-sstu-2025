@@ -38,10 +38,10 @@ object DatabaseModule {
                     super.onCreate(db)
                     scope.launch {
                         val dao = daoProvider.get()
-                        dao.insertDisease(Disease(title = "Мучнистая Роса", shortDesc = "Мучнистая Роса"))
-                        dao.insertDisease(Disease(title = "Ржавчина", shortDesc = "Ржавчина"))
-                        dao.insertDisease(Disease(title = "Пятнистость листьев", shortDesc = "Пятнистость листьев"))
-                        dao.insertDisease(Disease(title = "Поражение слизнями", shortDesc = "Поражение слизнями"))
+                        dao.insertDisease(Disease(id = "powdery", name = "Мучнистая Роса", description = "Мучнистая Роса"))
+                        dao.insertDisease(Disease(id = "rust", name = "Ржавчина", description = "Ржавчина"))
+                        dao.insertDisease(Disease(id = "slug", name = "Поражение слизнями", description = "Поражение слизнями"))
+                        dao.insertDisease(Disease(id = "spot", name = "Пятнистость листьев", description = "Пятнистость листьев"))
                     }
                 }
             })

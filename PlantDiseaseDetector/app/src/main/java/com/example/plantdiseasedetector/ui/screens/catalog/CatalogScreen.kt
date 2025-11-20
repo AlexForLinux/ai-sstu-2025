@@ -45,8 +45,8 @@ fun CatalogScreen(
         items(diseases) { disease ->
             DiseaseCard(
                 imageRes = R.drawable.ic_launcher_background,
-                title = disease.title,
-                description = disease.shortDesc,
+                title = disease.name,
+                description = disease.description,
                 onNavigateClick = { onDiseaseClick(disease) },
                 modifier = Modifier
                     .fillMaxWidth()
