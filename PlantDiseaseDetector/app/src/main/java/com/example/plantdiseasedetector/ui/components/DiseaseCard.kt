@@ -1,56 +1,43 @@
 package com.example.plantdiseasedetector.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import com.example.plantdiseasedetector.data.model.Disease
+import com.example.plantdiseasedetector.R
 
 @Composable
 fun DiseaseCard(
-    imageRes: Int,
-    title: String,
-    description: String,
-    onNavigateClick: () -> Unit,
+    disease: Disease,
+    onNavigateClick: (Disease) -> Unit,
     modifier : Modifier = Modifier
 ) {
 
-    var isMarked by remember { mutableStateOf(false) }
+    val onNavigateClickStable = remember(disease) {
+        { onNavigateClick(disease) }
+    }
 
     Box(
         modifier = modifier
+
     ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
-                .clickable(onClick =  onNavigateClick ),
+                .clickable(onClick = { onNavigateClickStable() }),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
-            shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Row(
@@ -61,10 +48,10 @@ fun DiseaseCard(
             ) {
 
                 Image(
-                    painter = painterResource(id = imageRes),
+                    painter = painterResource(id = disease.imageId),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(128.dp)
+                        .size(112.dp)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(12.dp)),
                     contentScale = ContentScale.Crop
@@ -73,48 +60,42 @@ fun DiseaseCard(
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .padding(8.dp)
+                        .padding(horizontal = 8.dp)
                         .weight(1f)
                 ) {
                     Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp
-                        ),
+                        text = disease.name,
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
                     )
 
 
                     Text(
-                        text = description,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                        text = disease.description,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 3,
-                        modifier = Modifier.weight(3f)
+                        modifier = Modifier
                     )
 
                 }
             }
         }
 
-        IconButton(
-            onClick = { isMarked = !isMarked},
+        Box(
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .offset(x = (8).dp, y = (-8).dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(50)
-                )
-        ) {
+            .size(24.dp)
+            .align(Alignment.TopEnd)
+                .offset(x = (-8).dp)
+        ){
             Icon(
-                imageVector = if (isMarked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                contentDescription = "Закладка",
-                tint = MaterialTheme.colorScheme.onPrimary
+                painter = painterResource(id = R.drawable.filledbookmark),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+                    .aspectRatio(1f),
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
-
 }

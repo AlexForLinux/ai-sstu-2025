@@ -1,57 +1,128 @@
 package com.example.plantdiseasedetector.ui.screens.catalog
 
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.plantdiseasedetector.R
 import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.ui.components.DiseaseCard
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.plantdiseasedetector.ui.components.FilterBar
+import com.example.plantdiseasedetector.ui.components.LoadingBox
+import com.example.plantdiseasedetector.ui.components.SearchBar
 
 @Composable
 fun CatalogScreen(
     onDiseaseClick: (Disease) -> Unit,
     viewModel: DiseaseVM = hiltViewModel())
 {
-    val diseases : List<Disease> by viewModel.diseases.collectAsState()
+    val diseaseState by viewModel.diseaseListState.collectAsState()
 
-    LazyColumn(
+    Column(
         modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .fillMaxSize()
-    ){
-        item {
-            Text(
-                text = "Каталог Заболеваний",
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+            .padding(horizontal = 16.dp)
+            .fillMaxSize(),
+    ) {
+        Text(
+            text = "Каталог Заболеваний",
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            SearchBar(
+                modifier = Modifier.weight(1f),
+                onQuery = {
+                    query -> viewModel.setQuery(query)
+                    viewModel.updateDiseaseList()
+                }
+            )
+            Spacer(Modifier.width(8.dp))
+            FilterBar(
+                onState = {
+                    filter -> viewModel.setFilter(filter)
+                    viewModel.updateDiseaseList()
+                }
             )
         }
 
-        items(diseases) { disease ->
-            DiseaseCard(
-                imageRes = R.drawable.ic_launcher_background,
-                title = disease.name,
-                description = disease.description,
-                onNavigateClick = { onDiseaseClick(disease) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
+        Spacer(Modifier.height(8.dp))
+
+        when (val state = diseaseState) {
+
+            is DiseaseListState.Loading -> {
+                Column(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                )
+                {
+                    LoadingBox(size = 128.dp)
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Загрузка данных ...",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
+
+            is DiseaseListState.Success -> {
+                val diseases = state.diseases
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(
+                        items = diseases,
+                        key = {it.id}
+                    ) { disease ->
+                        DiseaseCard(
+                            disease = disease,
+                            onNavigateClick = onDiseaseClick,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp)
+                        )
+                    }
+                }
+            }
+
+            is DiseaseListState.Error -> {
+
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.plantdiseasedetector.R
 import com.example.plantdiseasedetector.data.dao.DiseaseDao
 import com.example.plantdiseasedetector.data.datasource.local.db.LocalDataBase
 import com.example.plantdiseasedetector.data.model.Disease
@@ -38,10 +39,42 @@ object DatabaseModule {
                     super.onCreate(db)
                     scope.launch {
                         val dao = daoProvider.get()
-                        dao.insertDisease(Disease(id = "powdery", name = "Мучнистая Роса", description = "Мучнистая Роса"))
-                        dao.insertDisease(Disease(id = "rust", name = "Ржавчина", description = "Ржавчина"))
-                        dao.insertDisease(Disease(id = "slug", name = "Поражение слизнями", description = "Поражение слизнями"))
-                        dao.insertDisease(Disease(id = "spot", name = "Пятнистость листьев", description = "Пятнистость листьев"))
+                        dao.insertDisease(
+                            Disease(
+                                id = "powdery",
+                                name = "Мучнистая Роса",
+                                description = "Мучнистая Роса",
+                                imageId = R.drawable.powdery,
+                                marked = false
+                            )
+                        )
+                        dao.insertDisease(
+                            Disease(
+                                id = "rust",
+                                name = "Ржавчина",
+                                description = "Ржавчина",
+                                imageId = R.drawable.rust,
+                                marked = false
+                            )
+                        )
+                        dao.insertDisease(
+                            Disease(
+                                id = "slug",
+                                name = "Поражение слизнями",
+                                description = "Поражение слизнями",
+                                imageId = R.drawable.slug,
+                                marked = false
+                            )
+                        )
+                        dao.insertDisease(
+                            Disease(
+                                id = "spot",
+                                name = "Пятнистость листьев",
+                                description = "Пятнистость листьев",
+                                imageId = R.drawable.spot,
+                                marked = false
+                            )
+                        )
                     }
                 }
             })
