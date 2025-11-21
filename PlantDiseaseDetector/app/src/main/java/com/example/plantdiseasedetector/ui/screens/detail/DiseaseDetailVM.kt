@@ -39,4 +39,10 @@ class DiseaseDetailVM @Inject constructor (
             }
         }
     }
+
+    fun updateDiseaseMark(id: String, isMarked: Boolean){
+        viewModelScope.launch {
+            repository.updateDiseaseMark(id, isMarked)
+        }
+    }
 }

@@ -82,20 +82,22 @@ fun DiseaseCard(
             }
         }
 
-        Box(
-            modifier = Modifier
-            .size(24.dp)
-            .align(Alignment.TopEnd)
-                .offset(x = (-8).dp)
-        ){
-            Icon(
-                painter = painterResource(id = R.drawable.filledbookmark),
-                contentDescription = null,
+        if (disease.marked) {
+            Box(
                 modifier = Modifier
                     .size(24.dp)
-                    .aspectRatio(1f),
-                tint = MaterialTheme.colorScheme.primary
-            )
+                    .align(Alignment.TopEnd)
+                    .offset(x = (-8).dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.filledbookmark),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .aspectRatio(1f),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     }
 }

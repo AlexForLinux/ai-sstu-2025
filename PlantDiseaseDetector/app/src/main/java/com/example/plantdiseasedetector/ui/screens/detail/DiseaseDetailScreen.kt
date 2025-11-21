@@ -1,5 +1,6 @@
 package com.example.plantdiseasedetector.ui.screens.detail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,17 +21,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantdiseasedetector.ui.components.AdviceCard
 import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.LoadingBox
+import com.example.plantdiseasedetector.ui.components.MarkableIcon
 
 @Composable
 fun DiseaseDetailScreen(diseaseId: String?, viewModel: DiseaseDetailVM = hiltViewModel()) {
@@ -84,25 +90,43 @@ fun DiseaseDetailScreen(diseaseId: String?, viewModel: DiseaseDetailVM = hiltVie
             }
             is DiseaseDataState.Success -> {
                 val disease = state.item
+                val onMarkChangedCallback = remember(viewModel) {
+                    { mark: Boolean ->
+                        viewModel.updateDiseaseMark(disease.id, mark)
+
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = disease.name,
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = disease.name,
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center
+                    )
 
-                Box(
+                    MarkableIcon(
+                        marked = disease.marked,
+                        onMarkChange = onMarkChangedCallback
+                    )
+
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Image(
+                    painter = painterResource(id = disease.imageId),
+                    contentDescription = "Фото заболевания",
                     modifier = Modifier
                         .size(288.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                ) {
-                    /* Image */
-                }
+                )
 
                 Text(
                     text = disease.description,
