@@ -1,21 +1,30 @@
 package com.example.plantdiseasedetector.ui.screens.main
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.navigation.compose.*
 import com.example.myapp.ui.navigation.BottomNavItem
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.plantdiseasedetector.data.datasource.local.db.LocalDataBase
-import com.example.plantdiseasedetector.data.repository.DiseaseRepositoryImpl
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.plantdiseasedetector.ui.screens.catalog.CatalogScreen
-import com.example.plantdiseasedetector.ui.screens.catalog.DiseaseVM
+import com.example.plantdiseasedetector.ui.screens.detail.DiseaseDetailScreen
 import com.example.plantdiseasedetector.ui.screens.classify.ClassifyScreen
 import com.example.plantdiseasedetector.ui.screens.history.HistoryScreen
 
-@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun MainScreen() {
 
@@ -24,7 +33,6 @@ fun MainScreen() {
     val scope = rememberCoroutineScope()
 
     val navController = rememberNavController()
-    val localDataBase = LocalDataBase.getDatabase(context, scope)
 
     val items = listOf(
         BottomNavItem.Catalog,
@@ -33,8 +41,19 @@ fun MainScreen() {
     )
 
     Scaffold(
+        topBar = {
+            Box(
+                modifier = Modifier
+                    .height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
+                    .background(color = MaterialTheme.colorScheme.primary)
+                    .fillMaxWidth()
+            )
+        },
         bottomBar = {
-            NavigationBar {
+            NavigationBar (
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.secondary
+            ) {
                 val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 
                 items.forEach { item ->
@@ -46,8 +65,23 @@ fun MainScreen() {
                                 launchSingleTop = true
                             }
                         },
+                        colors =  NavigationBarItemColors(
+                            selectedIndicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                            selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                            unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledIconColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledTextColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
                         label = { Text(item.title) },
-                        icon = { Icon(item.icon, contentDescription = null)}
+                        icon = {
+                            Icon(
+                                painter = painterResource(item.drawableId),
+                                contentDescription = null,
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
                     )
                 }
             }
@@ -60,10 +94,26 @@ fun MainScreen() {
         ) {
             composable("catalog") {
                 //TODO: Temporary decision
-                val viewModel = DiseaseVM(DiseaseRepositoryImpl(localDataBase.diseaseDao))
-                CatalogScreen(viewModel)
+                CatalogScreen(
+                    onDiseaseClick = { disease ->
+                        navController.navigate("detail/${disease.id}")
+                    }
+                )
             }
-            composable("class") { ClassifyScreen() }
+            composable(
+                route = "detail/{diseaseId}",
+                arguments = listOf(navArgument("diseaseId") { type = NavType.StringType }),
+            ) { backStackEntry ->
+                val diseaseId = backStackEntry.arguments?.getString("diseaseId")
+                DiseaseDetailScreen(diseaseId = diseaseId)
+            }
+            composable("class") {
+                ClassifyScreen(
+                    onDiseaseClick = { id ->
+                        navController.navigate("detail/${id}")
+                    }
+                )
+            }
             composable("history") { HistoryScreen() }
         }
     }
