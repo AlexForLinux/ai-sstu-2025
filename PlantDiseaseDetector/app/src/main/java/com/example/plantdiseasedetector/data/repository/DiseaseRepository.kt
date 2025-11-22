@@ -1,6 +1,7 @@
 package com.example.plantdiseasedetector.data.repository
 
 import android.util.Log
+import androidx.compose.ui.text.toLowerCase
 import com.example.plantdiseasedetector.data.dao.DiseaseDao
 import com.example.plantdiseasedetector.data.model.Disease
 import kotlinx.coroutines.flow.Flow
@@ -44,7 +45,7 @@ class DiseaseRepositoryImpl @Inject constructor (
             diseases.filter { disease ->
 
                 (filter == null || disease.marked == filter)
-                && disease.description.contains(query)
+                && disease.description.lowercase().contains(query.lowercase())
 
             }
         }

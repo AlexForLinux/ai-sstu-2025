@@ -95,6 +95,7 @@ fun SearchBar(
 
         IconButton(
             onClick = {
+                query = ""
                 onQuery("")
             },
             modifier = Modifier
