@@ -23,14 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun AdviceCard(
-    number: Int,
     title: String,
-    description: String,
+    text: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -48,7 +48,7 @@ fun AdviceCard(
                     modifier = Modifier
                         .size(32.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.secondary,
+                            color = MaterialTheme.colorScheme.primary,
                             shape = RoundedCornerShape(
                                 topStart = 8.dp,
                                 topEnd = 8.dp,
@@ -56,13 +56,7 @@ fun AdviceCard(
                                 bottomStart = 0.dp
                             )
                         ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = number.toString(),
-                        color = Color.White,
-                    )
-                }
+                )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
@@ -79,10 +73,10 @@ fun AdviceCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = description,
-                fontSize = 14.sp,
-                color = Color.Gray,
-                lineHeight = 20.sp
+                text = text,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Left
             )
         }
     }

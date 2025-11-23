@@ -31,6 +31,7 @@ import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.ui.components.DiseaseCard
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.FilterBar
 import com.example.plantdiseasedetector.ui.components.LoadingBox
 import com.example.plantdiseasedetector.ui.components.SearchBar
@@ -41,6 +42,10 @@ fun CatalogScreen(
     viewModel: DiseaseVM = hiltViewModel())
 {
     val diseaseState by viewModel.diseaseListState.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        viewModel.updateDiseaseList()
+    }
 
     Column(
         modifier = Modifier
@@ -121,7 +126,10 @@ fun CatalogScreen(
             }
 
             is DiseaseListState.Error -> {
-
+                ErrorCard(
+                    "Ошибка",
+                    state.message
+                )
             }
         }
     }

@@ -36,7 +36,7 @@ class DiseaseDetailVM @Inject constructor (
     fun loadDisease(diseaseId: Long) {
         viewModelScope.launch {
             try {
-                val disease = repository.getDiseaseById(diseaseId)
+                val disease = repository.getDiseaseWithAdviceById(diseaseId)
                 _diseaseState.value = DiseaseDataState.Success(disease)
             } catch (e: Exception) {
                 setErrorState(e.message ?: "")
