@@ -39,7 +39,6 @@ import com.example.plantdiseasedetector.ui.components.LoadingBox
 import com.example.plantdiseasedetector.ui.components.MarkableIcon
 
 @Composable
-fun DiseaseDetailScreen(diseaseId: String?, viewModel: DiseaseDetailVM = hiltViewModel()) {
 fun DiseaseDetailScreen(
     diseaseId: Long?,
     viewModel: DiseaseDetailVM = hiltViewModel()
@@ -48,7 +47,6 @@ fun DiseaseDetailScreen(
     val diseaseState by viewModel.diseaseState.collectAsState()
 
     LaunchedEffect(diseaseId) {
-        viewModel.loadDisease(diseaseId)
         if (diseaseId == null) {
             viewModel.setErrorState("Страница не найдена")
         }
@@ -99,11 +97,14 @@ fun DiseaseDetailScreen(
                 }
             }
             is DiseaseDataState.Success -> {
-                val disease = state.item
-                val onMarkChangedCallback = remember(viewModel) {
-                    { mark: Boolean ->
-                        viewModel.updateDiseaseMark(disease.id, mark)
+                val diseaseWithAdvice = state.item
+                val disease = diseaseWithAdvice.disease
+                val advice = diseaseWithAdvice.advice
 
+                val onMarkChangedCallback = remember(viewModel) {
+                    {
+                        mark: Boolean ->
+                        viewModel.updateDiseaseMark(disease.id, mark)
                     }
                 }
 
@@ -148,7 +149,7 @@ fun DiseaseDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Left
                 )
 
                 Column(
@@ -164,11 +165,10 @@ fun DiseaseDetailScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    arrayOf(1, 2, 3).forEach { advice ->
+                    advice.forEach { advice ->
                         AdviceCard(
-                            advice,
-                            "Title",
-                            "Desc Desc Desc Desc Desc Desc Desc Desc sDesc Desc Desc",
+                            title = advice.title,
+                            text = advice.text,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp),

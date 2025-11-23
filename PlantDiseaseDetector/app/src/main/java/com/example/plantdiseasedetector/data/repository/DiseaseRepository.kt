@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.ui.text.toLowerCase
 import com.example.plantdiseasedetector.data.dao.DiseaseDao
 import com.example.plantdiseasedetector.data.model.Disease
+import com.example.plantdiseasedetector.data.model.DiseaseWithAdvice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -12,6 +13,7 @@ import javax.inject.Inject
 interface DiseaseRepository {
     suspend fun getDiseases(): List<Disease>
     suspend fun getDiseaseById(id: Long): Disease
+    suspend fun getDiseaseWithAdviceById(id: Long): DiseaseWithAdvice
 
     suspend fun getDiseaseByQueryAndFilter(query: String, filter: Boolean?): List<Disease>
     suspend fun updateDiseaseMark(id: Long, isMarked: Boolean)
@@ -28,6 +30,9 @@ class DiseaseRepositoryImpl @Inject constructor (
         return diseaseDao.getDiseaseById(id)
     }
 
+    override suspend fun getDiseaseWithAdviceById(id: Long): DiseaseWithAdvice {
+        return diseaseDao.getDiseaseWithAdviceById(id)
+    }
 
     override suspend fun getDiseaseByQueryAndFilter(query: String, filter: Boolean?): List<Disease> {
 

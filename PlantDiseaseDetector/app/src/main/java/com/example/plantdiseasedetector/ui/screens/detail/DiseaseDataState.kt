@@ -5,6 +5,6 @@ import com.example.plantdiseasedetector.data.model.DiseaseWithAdvice
 
 sealed class DiseaseDataState {
     object Loading : DiseaseDataState()
-    data class Success(val item: Disease) : DiseaseDataState()
+    data class Success(val item: DiseaseWithAdvice) : DiseaseDataState()
     data class Error(val message: String) : DiseaseDataState()
 }
