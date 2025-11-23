@@ -16,6 +16,7 @@ import kotlin.math.sin
 @Composable
 fun PrecisionPieChart(
     precisions: List<Float>,
+    showLabels: Boolean = true,
     modifier: Modifier = Modifier,
     defaultColors: List<Color> = generateGreenColors(precisions.size),
     grayColor: Color = Color.Gray.copy(alpha = 0.5f)
@@ -56,7 +57,7 @@ fun PrecisionPieChart(
                 size = Size(radius * 2, radius * 2)
             )
 
-            if (precision >= 0.125f) {
+            if (precision >= 0.125f && showLabels) {
                 val labelAngle = startAngle + sweepAngle / 2
                 val labelRadius = radius * 0.6f
                 val labelPosition = Offset(
