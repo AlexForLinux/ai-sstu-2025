@@ -1,29 +1,27 @@
 package com.example.plantdiseasedetector.ui.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.text.drawText
 import com.example.plantdiseasedetector.ui.functions.generateGreenColors
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun PrecisionPieChart(
-    precisions: List<Float>,
+fun ConfidencePieChart(
+    confidences: List<Float>,
     showLabels: Boolean = true,
     modifier: Modifier = Modifier,
-    defaultColors: List<Color> = generateGreenColors(precisions.size),
+    defaultColors: List<Color> = generateGreenColors(confidences.size),
     grayColor: Color = Color.Gray.copy(alpha = 0.5f)
 ) {
-    require(precisions.isNotEmpty()) { "Precisions list cannot be empty" }
-    require(precisions.all { it >= 0 }) { "All precision values must be non-negative" }
-    require(precisions.sum() <= 1.0f) { "All precision values must be non-negative" }
+    require(confidences.isNotEmpty()) { "Precisions list cannot be empty" }
+    require(confidences.all { it >= 0 }) { "All precision values must be non-negative" }
+    require(confidences.sum() <= 1.0f) { "All precision values must be non-negative" }
 
     Canvas (
         modifier = modifier
@@ -41,9 +39,9 @@ fun PrecisionPieChart(
 
         var startAngle = -90f
 
-        precisions.forEachIndexed { index, precision ->
+        confidences.forEachIndexed { index, confidence ->
 
-            val sweepAngle = precision * 360f
+            val sweepAngle = confidence * 360f
 
             drawArc(
                 color = defaultColors[index],
@@ -57,7 +55,7 @@ fun PrecisionPieChart(
                 size = Size(radius * 2, radius * 2)
             )
 
-            if (precision >= 0.125f && showLabels) {
+            if (confidence >= 0.125f && showLabels) {
                 val labelAngle = startAngle + sweepAngle / 2
                 val labelRadius = radius * 0.6f
                 val labelPosition = Offset(
@@ -67,7 +65,7 @@ fun PrecisionPieChart(
 
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
-                        "${"%.1f".format(precision * 100)}%",
+                        "${"%.1f".format(confidence * 100)}%",
                         labelPosition.x,
                         labelPosition.y,
                         android.graphics.Paint().apply {

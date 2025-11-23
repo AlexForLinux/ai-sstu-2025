@@ -1,10 +1,6 @@
 package com.example.plantdiseasedetector.ui.screens.classify
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -21,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -32,30 +27,23 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.plantdiseasedetector.R
-import com.example.plantdiseasedetector.data.model.Disease
-import com.example.plantdiseasedetector.data.model.PrecisionLevel
+import com.example.plantdiseasedetector.data.model.ConfidenceLevel
+import com.example.plantdiseasedetector.ui.components.ConfidencePieChart
 import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.LoadingBox
-import com.example.plantdiseasedetector.ui.components.PrecisionPieChart
 import com.example.plantdiseasedetector.ui.components.TextWithLinks
 import com.example.plantdiseasedetector.ui.functions.generateGreenColors
 import com.example.plantdiseasedetector.ui.functions.uriToBitmap
@@ -63,7 +51,7 @@ import com.example.plantdiseasedetector.ui.functions.uriToBitmap
 @Composable
 fun ClassifyScreen(
     viewModel: ClassifyVM = hiltViewModel(),
-    onDiseaseClick: (String) -> Unit
+    onDiseaseClick: (Long) -> Unit
 ) {
     val predictionsState by viewModel.predictionsState.collectAsState()
 
@@ -204,8 +192,8 @@ fun ClassifyScreen(
             }
             is PredictionDataState.Success -> {
                 val modelPrediction = state.item
-                val precisions = modelPrediction.precisions
-                val myColors = generateGreenColors(precisions.size)
+                val confidences = modelPrediction.confidences
+                val myColors = generateGreenColors(confidences.size)
 
                 Column(
                     modifier = Modifier
@@ -234,15 +222,19 @@ fun ClassifyScreen(
                                 .fillMaxWidth()
                         )
                         {
-                            val diseases = (precisions.associate { precision ->
-                                precision.diseaseId to precision.name
-                            } - "healthy")
+                            val diseases = confidences
+                                .mapNotNull { confidence ->
+                                    confidence.diseaseId?.let { diseaseId ->
+                                        diseaseId to confidence.diseaseName
+                                    }
+                                }
+                                .toMap()
 
-                            when (state.item.precisionLevel) {
+                            when (state.item.confidenceLevel) {
 
-                                PrecisionLevel.HIGH -> {
+                                ConfidenceLevel.HIGH -> {
                                     TextWithLinks(
-                                        "Вероятный диагноз: ${precisions[0].name}",
+                                        "Вероятный диагноз: ${confidences[0].diseaseName}",
                                         diseases,
                                         onDiseaseClick = { s -> onDiseaseClick(s) },
                                         style = MaterialTheme.typography.bodyLarge,
@@ -250,10 +242,10 @@ fun ClassifyScreen(
                                     )
                                 }
 
-                                PrecisionLevel.MEDIUM -> {
+                                ConfidenceLevel.MEDIUM -> {
                                     TextWithLinks(
-                                        "Вероятный диагноз: ${precisions[0].name}\n" +
-                                                "Однако есть основания для другого диагноза: ${precisions[1].name}",
+                                        "Вероятный диагноз: ${confidences[0].diseaseName}\n" +
+                                                "Однако есть основания для другого диагноза: ${confidences[1].diseaseName}",
                                         diseases,
                                         onDiseaseClick = { s -> onDiseaseClick(s) },
                                         style = MaterialTheme.typography.bodyLarge,
@@ -261,7 +253,7 @@ fun ClassifyScreen(
                                     )
                                 }
 
-                                PrecisionLevel.LOW -> {
+                                ConfidenceLevel.LOW -> {
                                     Text(
                                         "Не удалось однозначно определить диагноз. Попробуйте сделать фотограию при лучшем освещении или с другого ракурса.",
                                         style = MaterialTheme.typography.bodyLarge,
@@ -283,8 +275,8 @@ fun ClassifyScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            PrecisionPieChart(
-                                precisions.map { it.precision },
+                            ConfidencePieChart(
+                                confidences.map { it.confidence },
                                 modifier = Modifier.size(128.dp),
                                 defaultColors = myColors,
                             )
@@ -294,7 +286,7 @@ fun ClassifyScreen(
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
-                                precisions.forEachIndexed { idx, precision ->
+                                confidences.forEachIndexed { idx, precision ->
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -323,7 +315,7 @@ fun ClassifyScreen(
 
                                             Spacer(modifier = Modifier.width(4.dp))
 
-                                            Text(precision.name)
+                                            Text(precision.diseaseName)
                                         }
                                     }
                                 }

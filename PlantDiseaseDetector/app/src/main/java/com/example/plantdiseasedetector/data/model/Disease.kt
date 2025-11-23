@@ -5,8 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity("diseases")
 data class Disease (
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val className: String,
     val name: String,
     val description: String,
     val imageId: Int,

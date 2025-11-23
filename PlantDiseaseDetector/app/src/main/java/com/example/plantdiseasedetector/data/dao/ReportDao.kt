@@ -33,7 +33,7 @@ interface ReportDao {
         SELECT report_items.*,
                diseases.name as diseaseName
         FROM report_items
-        LEFT JOIN diseases ON report_items.diseaseId = diseases.id
+        LEFT JOIN diseases ON report_items.diseaseClassName = diseases.className
         WHERE report_items.reportId = :reportId
     """)
     suspend fun getReportDetailedItems(reportId: Long): List<ReportDetailedItem>

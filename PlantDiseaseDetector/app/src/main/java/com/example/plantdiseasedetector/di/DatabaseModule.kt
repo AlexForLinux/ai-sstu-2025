@@ -42,7 +42,7 @@ object DatabaseModule {
                         val dao = daoProvider.get()
                         dao.insertDisease(
                             Disease(
-                                id = "powdery",
+                                className = "powdery",
                                 name = "Мучнистая Роса",
                                 description = "Мучнистая Роса",
                                 imageId = R.drawable.powdery,
@@ -51,7 +51,7 @@ object DatabaseModule {
                         )
                         dao.insertDisease(
                             Disease(
-                                id = "rust",
+                                className = "rust",
                                 name = "Ржавчина",
                                 description = "Ржавчина",
                                 imageId = R.drawable.rust,
@@ -60,7 +60,7 @@ object DatabaseModule {
                         )
                         dao.insertDisease(
                             Disease(
-                                id = "slug",
+                                className = "slug",
                                 name = "Поражение слизнями",
                                 description = "Поражение слизнями",
                                 imageId = R.drawable.slug,
@@ -69,7 +69,7 @@ object DatabaseModule {
                         )
                         dao.insertDisease(
                             Disease(
-                                id = "spot",
+                                className = "spot",
                                 name = "Пятнистость листьев",
                                 description = "Пятнистость листьев",
                                 imageId = R.drawable.spot,

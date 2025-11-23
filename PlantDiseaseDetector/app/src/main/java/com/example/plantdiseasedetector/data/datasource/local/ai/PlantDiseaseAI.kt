@@ -1,9 +1,9 @@
 package com.example.plantdiseasedetector.data.datasource.local.ai
 
 import android.graphics.Bitmap
-import com.example.plantdiseasedetector.data.model.DiseasePrecision
+import com.example.plantdiseasedetector.data.model.DiseaseConfidence
 
 interface PlantDiseaseAI {
-    fun classifyByBitmap(bitmap: Bitmap) : List<DiseasePrecision>
+    fun classifyByBitmap(bitmap: Bitmap) : List<DiseaseConfidence>
 }
 

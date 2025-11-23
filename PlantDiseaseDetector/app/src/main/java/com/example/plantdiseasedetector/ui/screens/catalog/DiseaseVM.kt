@@ -49,15 +49,20 @@ class DiseaseVM @Inject constructor (
 
     fun updateDiseaseList() {
         viewModelScope.launch {
-            repository.getDiseaseByQueryAndFilter(queryState.value, filterState.value)
-                .catch { exception ->
-                    _diseaseListState.value = DiseaseListState.Error(
-                        message = "Не удалось загрузить данные: ${exception.message}"
+            try {
+                val diseases = repository
+                    .getDiseaseByQueryAndFilter(
+                        queryState.value,
+                        filterState.value
                     )
-                }
-                .collect { diseases ->
-                    _diseaseListState.value = DiseaseListState.Success(diseases)
-                }
+
+                _diseaseListState.value = DiseaseListState.Success(diseases)
+            }
+            catch (e: Exception) {
+                _diseaseListState.value = DiseaseListState.Error(
+                    message = "Не удалось загрузить данные: ${e.message}"
+                )
+            }
         }
     }
 }

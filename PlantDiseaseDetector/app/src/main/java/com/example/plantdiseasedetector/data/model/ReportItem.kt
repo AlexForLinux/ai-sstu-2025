@@ -8,6 +8,6 @@ data class ReportItem(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val reportId: Long = 0,
-    val diseaseId: String?,
-    val precision: Float,
+    val diseaseClassName: String?,
+    val confidence: Float,
 )

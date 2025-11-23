@@ -135,8 +135,8 @@ fun ReportCard(
 //                                        )
 //                                    }
 
-                                    PrecisionPieChart(
-                                        floatArrayOf(detailedItem.item.precision).asList(),
+                                    ConfidencePieChart(
+                                        floatArrayOf(detailedItem.item.confidence).asList(),
                                         modifier = Modifier.size(28.dp),
                                         defaultColors = colors,
                                         grayColor = Color.LightGray,

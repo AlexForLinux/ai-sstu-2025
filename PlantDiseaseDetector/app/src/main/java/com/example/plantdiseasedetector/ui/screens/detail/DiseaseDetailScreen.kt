@@ -40,11 +40,21 @@ import com.example.plantdiseasedetector.ui.components.MarkableIcon
 
 @Composable
 fun DiseaseDetailScreen(diseaseId: String?, viewModel: DiseaseDetailVM = hiltViewModel()) {
+fun DiseaseDetailScreen(
+    diseaseId: Long?,
+    viewModel: DiseaseDetailVM = hiltViewModel()
+) {
 
     val diseaseState by viewModel.diseaseState.collectAsState()
 
     LaunchedEffect(diseaseId) {
         viewModel.loadDisease(diseaseId)
+        if (diseaseId == null) {
+            viewModel.setErrorState("Страница не найдена")
+        }
+        else {
+            viewModel.loadDisease(diseaseId)
+        }
     }
 
     Column(

@@ -2,7 +2,7 @@ package com.example.plantdiseasedetector.data.datasource.local.ai
 
 import android.graphics.Bitmap
 import androidx.core.graphics.scale
-import com.example.plantdiseasedetector.data.model.DiseasePrecision
+import com.example.plantdiseasedetector.data.model.DiseaseConfidence
 import org.pytorch.IValue
 import org.pytorch.Module
 import org.pytorch.Tensor
@@ -36,15 +36,15 @@ class PlantDiseaseAIImpl (
         return exp.map { it / sum }.toFloatArray()
     }
 
-    override fun classifyByBitmap(bitmap: Bitmap) : List<DiseasePrecision> {
+    override fun classifyByBitmap(bitmap: Bitmap) : List<DiseaseConfidence> {
         val inputTensor = bitmapToFloatTensor(bitmap)
         val outputTensor = module.forward(IValue.from(inputTensor)).toTensor()
 
         val scores = softmax(outputTensor.dataAsFloatArray)
         val predictionList = scores.mapIndexed { idx, score ->
-            DiseasePrecision(classes[idx], score)
+            DiseaseConfidence(classes[idx], score)
         }
 
-        return predictionList.sortedBy { - it.precision }
+        return predictionList.sortedBy { - it.confidence }
     }
 }

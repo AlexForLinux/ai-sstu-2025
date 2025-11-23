@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TextWithLinks(
     message: String,
-    diseases: Map<String, String>,
-    onDiseaseClick: (String) -> Unit,
+    diseases: Map<Long, String>,
+    onDiseaseClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     style: TextStyle,
     textAlign: TextAlign? = null,

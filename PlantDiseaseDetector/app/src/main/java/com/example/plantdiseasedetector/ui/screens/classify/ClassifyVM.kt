@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plantdiseasedetector.data.model.DiseasePrecision
 import com.example.plantdiseasedetector.data.model.ReportItem
 import com.example.plantdiseasedetector.data.repository.ClassifyRepository
 import com.example.plantdiseasedetector.data.repository.DiseaseRepository
@@ -46,28 +45,27 @@ class ClassifyVM @Inject constructor (
 
         viewModelScope.launch {
             loadedBitmap?.let {
-                classifyRepository.predict(it)
-                    .catch { exception ->
-                        _predictionsState.value = PredictionDataState.Error(
-                            "Не удалось обработать изображение: ${exception.message}"
+                try {
+                    val modelPrediction = classifyRepository.predict(it)
+                    _predictionsState.value = PredictionDataState.Success(modelPrediction)
+
+                    val items = modelPrediction.confidences.map { precision ->
+                        ReportItem(
+                            diseaseClassName = precision.className,
+                            confidence = precision.confidence
                         )
                     }
-                    .collect { modelPrediction ->
-        //                TODO: should they granted to complete both?
-                        _predictionsState.value = PredictionDataState.Success(modelPrediction)
 
-                        val items = modelPrediction.precisions.map { precision ->
-                            ReportItem(
-                                diseaseId = if (precision.diseaseId != "healthy") precision.diseaseId else null,
-                                precision = precision.precision
-                            )
-                        }
-
-                        val imageFileName = imageRepository.generateFileName()
-                        val imagePath = imageRepository.saveBitmap(loadedBitmap!!, imageFileName)
-                        if (imagePath != null)
-                            historyRepository.createReport(imagePath, items)
-                    }
+                    val imageFileName = imageRepository.generateFileName()
+                    val imagePath = imageRepository.saveBitmap(loadedBitmap!!, imageFileName)
+                    if (imagePath != null)
+                        historyRepository.createReport(imagePath, items)
+                }
+                catch (e: Exception){
+                    _predictionsState.value = PredictionDataState.Error(
+                        "Не удалось обработать изображение: ${e.message}"
+                    )
+                }
             }
         }
     }

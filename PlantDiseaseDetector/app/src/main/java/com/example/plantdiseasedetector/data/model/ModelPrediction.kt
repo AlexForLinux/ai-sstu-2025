@@ -1,6 +1,6 @@
 package com.example.plantdiseasedetector.data.model
 
 data class ModelPrediction(
-    val precisionLevel: PrecisionLevel,
-    val precisions: List<ExpandDiseasePrecision>
+    val confidenceLevel: ConfidenceLevel,
+    val confidences: List<ExpandDiseaseConfidence>
 )

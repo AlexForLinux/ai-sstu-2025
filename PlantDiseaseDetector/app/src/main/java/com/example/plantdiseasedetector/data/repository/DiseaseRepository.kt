@@ -10,25 +10,33 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 interface DiseaseRepository {
-    fun getDiseases(): Flow<List<Disease>>
-    fun getDiseaseById(id: String?): Flow<Disease?>
+    suspend fun getDiseases(): List<Disease>
+    suspend fun getDiseaseById(id: Long): Disease
 
-    fun getDiseaseByQueryAndFilter(query: String, filter: Boolean?): Flow<List<Disease>>
-    suspend fun updateDiseaseMark(id: String, isMarked: Boolean)
+    suspend fun getDiseaseByQueryAndFilter(query: String, filter: Boolean?): List<Disease>
+    suspend fun updateDiseaseMark(id: Long, isMarked: Boolean)
 }
 
 class DiseaseRepositoryImpl @Inject constructor (
     private val diseaseDao: DiseaseDao
 ) : DiseaseRepository {
-    override fun getDiseases(): Flow<List<Disease>> {
+    override suspend fun getDiseases(): List<Disease> {
         return diseaseDao.getDiseases()
     }
 
-    override fun getDiseaseById(id: String?): Flow<Disease?> {
+    override suspend fun getDiseaseById(id: Long): Disease {
         return diseaseDao.getDiseaseById(id)
     }
 
-    override fun getDiseaseByQueryAndFilter(query: String, filter: Boolean?): Flow<List<Disease>> {
+
+    override suspend fun getDiseaseByQueryAndFilter(query: String, filter: Boolean?): List<Disease> {
+
+        val diseases = diseaseDao.getDiseases()
+
+        return diseases.filter { disease ->
+            (filter == null || disease.marked == filter)
+            && disease.description.lowercase().contains(query.lowercase())
+        }
 
         /* I believe it's excessive for 4 items to use db search, so...*/
 
@@ -39,19 +47,9 @@ class DiseaseRepositoryImpl @Inject constructor (
 //
 //        if (!query.isEmpty()) return diseaseDao.getDiseasesByQuery(query)
 //        return diseaseDao.getDiseases()
-
-        return diseaseDao.getDiseases().map {
-            diseases ->
-            diseases.filter { disease ->
-
-                (filter == null || disease.marked == filter)
-                && disease.description.lowercase().contains(query.lowercase())
-
-            }
-        }
     }
 
-    override suspend fun updateDiseaseMark(id: String, isMarked: Boolean) {
+    override suspend fun updateDiseaseMark(id: Long, isMarked: Boolean) {
         diseaseDao.updateMark(id, isMarked)
     }
 }

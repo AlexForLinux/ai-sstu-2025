@@ -102,9 +102,9 @@ fun MainScreen() {
             }
             composable(
                 route = "detail/{diseaseId}",
-                arguments = listOf(navArgument("diseaseId") { type = NavType.StringType }),
+                arguments = listOf(navArgument("diseaseId") { type = NavType.LongType }),
             ) { backStackEntry ->
-                val diseaseId = backStackEntry.arguments?.getString("diseaseId")
+                val diseaseId = backStackEntry.arguments?.getLong("diseaseId")
                 DiseaseDetailScreen(diseaseId = diseaseId)
             }
             composable("class") {

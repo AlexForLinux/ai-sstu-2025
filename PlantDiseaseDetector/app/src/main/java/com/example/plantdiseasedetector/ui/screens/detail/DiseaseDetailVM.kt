@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.data.repository.DiseaseRepository
+import com.example.plantdiseasedetector.ui.screens.history.HistoryDataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,26 +22,29 @@ class DiseaseDetailVM @Inject constructor (
     private val _diseaseState = MutableStateFlow<DiseaseDataState>(DiseaseDataState.Loading)
     val diseaseState: StateFlow<DiseaseDataState> = _diseaseState.asStateFlow()
 
-    fun loadDisease(diseaseId: String?) {
+    fun setErrorState(message: String) {
+        var fullMessage = "Не удалось загузить сведения"
+
+        if (!message.isEmpty()) {
+            fullMessage += ": $message"
+        }
+
+        _diseaseState.value =
+            DiseaseDataState.Error(fullMessage)
+    }
+
+    fun loadDisease(diseaseId: Long) {
         viewModelScope.launch {
-            Log.i("TAG", diseaseId.toString())
-            repository.getDiseaseById(diseaseId)
-            .catch { exception ->
-                _diseaseState.value = DiseaseDataState.Error(
-                    message = "Не удалось загрузить данные: ${exception.message}"
-                )
-            }
-            .collect { disease ->
-                if (disease != null) {
-                    _diseaseState.value = DiseaseDataState.Success(disease)
-                } else {
-                    _diseaseState.value = DiseaseDataState.Error("Страница не найдена")
-                }
+            try {
+                val disease = repository.getDiseaseById(diseaseId)
+                _diseaseState.value = DiseaseDataState.Success(disease)
+            } catch (e: Exception) {
+                setErrorState(e.message ?: "")
             }
         }
     }
 
-    fun updateDiseaseMark(id: String, isMarked: Boolean){
+    fun updateDiseaseMark(id: Long, isMarked: Boolean){
         viewModelScope.launch {
             repository.updateDiseaseMark(id, isMarked)
         }

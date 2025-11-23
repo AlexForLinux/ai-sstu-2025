@@ -1,6 +1,6 @@
 package com.example.plantdiseasedetector.data.model
 
-enum class PrecisionLevel {
+enum class ConfidenceLevel {
     HIGH,
     MEDIUM,
     LOW
