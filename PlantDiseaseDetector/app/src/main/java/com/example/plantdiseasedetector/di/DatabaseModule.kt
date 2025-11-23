@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.plantdiseasedetector.R
 import com.example.plantdiseasedetector.data.dao.DiseaseDao
+import com.example.plantdiseasedetector.data.dao.ReportDao
 import com.example.plantdiseasedetector.data.datasource.local.db.LocalDataBase
 import com.example.plantdiseasedetector.data.model.Disease
 import dagger.Module
@@ -84,5 +85,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDiseaseDao(db: LocalDataBase): DiseaseDao = db.diseaseDao
+
+    @Provides
+    @Singleton
+    fun provideReportDao(db: LocalDataBase): ReportDao = db.reportDao
 }
 
