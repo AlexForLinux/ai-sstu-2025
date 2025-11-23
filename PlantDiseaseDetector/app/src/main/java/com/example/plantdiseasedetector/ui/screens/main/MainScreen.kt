@@ -81,7 +81,8 @@ fun MainScreen() {
                                 contentDescription = null,
                                 modifier = Modifier.size(40.dp)
                             )
-                        }
+                        },
+                        modifier = Modifier.padding(top=8.dp)
                     )
                 }
             }
