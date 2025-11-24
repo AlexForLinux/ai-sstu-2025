@@ -37,28 +37,29 @@ fun HistoryCard(
                 .fillMaxWidth()
         ) {
             Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth(),
             ) {
                 Text(
                     text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(top = 4.dp),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                        .padding(top = 4.dp)
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .size(height = 32.dp, width = 72.dp)
                         .background(
                             color = MaterialTheme.colorScheme.primary,
                             shape = RoundedCornerShape(8.dp)
-                        ),
-                    contentAlignment = Alignment.Center
+                        )
                 ) {
                     Text(
                         text = "$precision%",

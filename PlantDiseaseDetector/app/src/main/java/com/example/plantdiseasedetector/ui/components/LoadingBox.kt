@@ -41,9 +41,9 @@ fun LoadingBox(
     )
 
     Box(
+        contentAlignment = Alignment.Center,
         modifier = modifier
             .size(size),
-        contentAlignment = Alignment.Center,
     ) {
         Canvas (modifier = Modifier.matchParentSize()) {
             drawCircle(

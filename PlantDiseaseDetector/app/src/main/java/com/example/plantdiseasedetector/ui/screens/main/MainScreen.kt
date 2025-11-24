@@ -28,10 +28,6 @@ import com.example.plantdiseasedetector.ui.screens.history.HistoryScreen
 @Composable
 fun MainScreen() {
 
-    //TODO: Temporary decision
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
     val navController = rememberNavController()
 
     val items = listOf(
@@ -82,7 +78,8 @@ fun MainScreen() {
                                 modifier = Modifier.size(40.dp)
                             )
                         },
-                        modifier = Modifier.padding(top=8.dp)
+                        modifier = Modifier
+                            .padding(top=8.dp)
                     )
                 }
             }
@@ -91,23 +88,30 @@ fun MainScreen() {
         NavHost(
             navController = navController,
             startDestination = "catalog",
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
         ) {
             composable("catalog") {
-                //TODO: Temporary decision
                 CatalogScreen(
                     onDiseaseClick = { disease ->
                         navController.navigate("detail/${disease.id}")
                     }
                 )
             }
+
             composable(
                 route = "detail/{diseaseId}",
-                arguments = listOf(navArgument("diseaseId") { type = NavType.LongType }),
-            ) { backStackEntry ->
+                arguments = listOf(
+                    navArgument("diseaseId") {
+                        type = NavType.LongType
+                    }
+                ),
+            ) {
+                backStackEntry ->
                 val diseaseId = backStackEntry.arguments?.getLong("diseaseId")
                 DiseaseDetailScreen(diseaseId = diseaseId)
             }
+
             composable("class") {
                 ClassifyScreen(
                     onDiseaseClick = { id ->
@@ -115,6 +119,7 @@ fun MainScreen() {
                     }
                 )
             }
+
             composable("history") { HistoryScreen() }
         }
     }

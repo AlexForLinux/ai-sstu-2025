@@ -24,6 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -33,8 +35,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.modifier.ModifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,12 +57,14 @@ import com.example.plantdiseasedetector.ui.functions.generateGreenColors
 
 @Composable
 fun ReportCard(
+    modifier: Modifier = Modifier,
     report: ReportWithDetails,
     image: Bitmap?,
     onDelete: (Long) -> Unit,
     colors: List<Color> = generateGreenColors(report.detailedItems.size),
-    modifier: Modifier = Modifier
 ) {
+
+    var deleteWarning by remember { mutableStateOf<Boolean>(false)}
 
     Box (
         modifier = modifier
@@ -70,90 +77,135 @@ fun ReportCard(
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             modifier = Modifier
                 .fillMaxWidth()
-
         ) {
 
-            Column (
-                modifier = Modifier.padding(8.dp)
-            ) {
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+            if (deleteWarning) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .height(142.dp)
+                ){
                     Text(
-                        "Отчет от " + formatDateTime(report.report.createdAt),
+                        "Точно желаете удалить данный отчет?",
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
                     )
+                    Row(
+                        modifier = Modifier
+                    ){
+                        Button(
+                            onClick = {
+                                onDelete(report.report.id)
+                                deleteWarning = false
+                            },
+                            colors = ButtonColors(
+                                containerColor = MaterialTheme.colorScheme.tertiary,
+                                contentColor = MaterialTheme.colorScheme.onTertiary,
+                                disabledContentColor = Color.Gray,
+                                disabledContainerColor = Color.LightGray
+                            ),
+                            modifier = Modifier
+                                .width(96.dp)
+                        ) {
+                            Text("Да")
+                        }
+
+                        Spacer(modifier = Modifier.width(40.dp))
+
+                        Button(
+                            onClick = { deleteWarning = false },
+                            colors = ButtonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary,
+                                disabledContentColor = Color.Gray,
+                                disabledContainerColor = Color.LightGray
+                            ),
+                            modifier = Modifier
+                                .width(96.dp)
+                        ) {
+                            Text("Нет")
+                        }
+                    }
                 }
-
-                Spacer(Modifier.height(4.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+            }
+            else {
+                Column (
+                    modifier = Modifier
+                        .padding(8.dp)
                 ) {
 
-
-                    Box(
-                        modifier = Modifier.clip(RoundedCornerShape(12.dp))
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
                     ) {
-                        AsyncImage(
-                            model = image,
-                            contentDescription = "Фото",
-                            modifier = Modifier.size(112.dp),
-                            contentScale = ContentScale.Crop
+                        Text(
+                            "Отчет от " + formatDateTime(report.report.createdAt),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.titleMedium,
                         )
                     }
 
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.height(4.dp))
 
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.SpaceBetween
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth(),
                     ) {
-                        report.detailedItems.forEachIndexed { idx, detailedItem ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
 
-                            ) {
+
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(12.dp))
+                        ) {
+                            AsyncImage(
+                                model = image,
+                                contentDescription = "Фото",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(112.dp),
+                            )
+                        }
+
+                        Spacer(Modifier.width(8.dp))
+
+                        Column(
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        ) {
+                            report.detailedItems.forEachIndexed { idx, detailedItem ->
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 4.dp),
                                 ) {
-//                                    Box(
-//                                        modifier = Modifier
-//                                            .size(28.dp)
-//                                            .clip(RoundedCornerShape(16.dp))
-//                                            .background(
-//                                                colors[idx]
-//                                            ),
-//                                        contentAlignment = Alignment.Center
-//                                    ) {
-//                                        Text(
-//                                            (idx + 1).toString(),
-//                                            color = MaterialTheme.colorScheme.onPrimary
-//                                        )
-//                                    }
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        ConfidencePieChart(
+                                            confidences =
+                                                floatArrayOf(detailedItem.item.confidence).asList(),
+                                            defaultColors = colors,
+                                            grayColor = Color.LightGray,
+                                            showLabels = false,
+                                            modifier = Modifier
+                                                .size(28.dp),
+                                        )
 
-                                    ConfidencePieChart(
-                                        floatArrayOf(detailedItem.item.confidence).asList(),
-                                        modifier = Modifier.size(28.dp),
-                                        defaultColors = colors,
-                                        grayColor = Color.LightGray,
-                                        showLabels = false
-                                    )
+                                        Spacer(modifier = Modifier.width(4.dp))
 
-                                    Spacer(modifier = Modifier.width(4.dp))
-
-                                    Text(
-                                        detailedItem.diseaseName ?: "Здоровое растение"
-                                    )
+                                        Text(
+                                            text = detailedItem.diseaseName ?: "Здоровое растение"
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -162,26 +214,28 @@ fun ReportCard(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .size(28.dp)
-                .align(Alignment.TopEnd)
-                .offset(x = (-4).dp, y = (4).dp)
-                .background(
-                    MaterialTheme.colorScheme.tertiary,
-                    RoundedCornerShape(8.dp)
-                )
-                .clickable(onClick = {
-                    onDelete(report.report.id)
-                })
+        if (!deleteWarning) {
+            Box(
+                modifier = Modifier
+                    .size(28.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = (-4).dp, y = (4).dp)
+                    .background(
+                        MaterialTheme.colorScheme.tertiary,
+                        RoundedCornerShape(8.dp)
+                    )
+                    .clickable(onClick = {
+                        deleteWarning = true
+                    })
 
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Clear,
-                contentDescription = "Сделать фото",
-                tint = MaterialTheme.colorScheme.onTertiary,
-                modifier = Modifier.size(24.dp).align(Alignment.Center)
-            )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Clear,
+                    contentDescription = "Сделать фото",
+                    tint = MaterialTheme.colorScheme.onTertiary,
+                    modifier = Modifier.size(24.dp).align(Alignment.Center)
+                )
+            }
         }
     }
 }

@@ -49,14 +49,25 @@ fun FilterBar(
         },
         modifier = modifier
             .background(
-                if (state == FilterState.NO_FILTER) Color.LightGray else MaterialTheme.colorScheme.primary,
-                RoundedCornerShape(12.dp)
+                color = if (state == FilterState.NO_FILTER)
+                            Color.LightGray
+                        else
+                            MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(12.dp)
             )
     ) {
         Icon(
-            painter = painterResource(id = if (state == FilterState.NOT_MARKED) iconNotChosen else iconChosen),
+            painter = painterResource(
+                id = if (state == FilterState.NOT_MARKED)
+                        iconNotChosen
+                    else
+                        iconChosen
+            ),
             contentDescription = description,
-            tint = if (state == FilterState.NO_FILTER) Color.Gray else MaterialTheme.colorScheme.onPrimary,
+            tint = if (state == FilterState.NO_FILTER)
+                        Color.Gray
+                    else
+                        MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(4.dp)

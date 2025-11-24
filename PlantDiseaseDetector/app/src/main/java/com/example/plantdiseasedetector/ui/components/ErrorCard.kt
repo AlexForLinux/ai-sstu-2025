@@ -41,9 +41,10 @@ fun ErrorCard(
                 .fillMaxWidth(),
         ) {
             Row (
-                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 Box(
                     modifier = Modifier
@@ -65,10 +66,10 @@ fun ErrorCard(
 
                 Text(
                     text = title,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(top = 4.dp),
-                    style = MaterialTheme.typography.titleMedium
+                        .padding(top = 4.dp)
                 )
             }
 

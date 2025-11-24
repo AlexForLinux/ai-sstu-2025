@@ -61,5 +61,4 @@ interface ReportDao {
         deleteReportItemsByReportId(reportId)
         deleteReportById(reportId)
     }
-
 }

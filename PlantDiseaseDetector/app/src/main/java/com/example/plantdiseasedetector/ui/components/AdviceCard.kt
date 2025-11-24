@@ -41,8 +41,9 @@ fun AdviceCard(
                 .fillMaxWidth()
         ) {
             Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 Box(
                     modifier = Modifier
@@ -62,11 +63,11 @@ fun AdviceCard(
 
                 Text(
                     text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .weight(1f)
                         .padding(top = 4.dp),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 

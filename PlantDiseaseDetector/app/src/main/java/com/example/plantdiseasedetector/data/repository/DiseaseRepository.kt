@@ -22,6 +22,7 @@ interface DiseaseRepository {
 class DiseaseRepositoryImpl @Inject constructor (
     private val diseaseDao: DiseaseDao
 ) : DiseaseRepository {
+
     override suspend fun getDiseases(): List<Disease> {
         return diseaseDao.getDiseases()
     }

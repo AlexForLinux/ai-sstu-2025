@@ -46,6 +46,7 @@ import coil.compose.AsyncImage
 import com.example.plantdiseasedetector.R
 import com.example.plantdiseasedetector.data.model.ConfidenceLevel
 import com.example.plantdiseasedetector.ui.components.ConfidencePieChart
+import com.example.plantdiseasedetector.ui.components.DiagnosticResult
 import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.LoadingBox
 import com.example.plantdiseasedetector.ui.components.TextWithLinks
@@ -77,9 +78,9 @@ fun ClassifyScreen(
     }
 
     Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = "ИИ-Диагностика",
@@ -91,6 +92,7 @@ fun ClassifyScreen(
         )
 
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(288.dp)
                 .clip(RoundedCornerShape(16.dp))
@@ -101,15 +103,15 @@ fun ClassifyScreen(
                 )
                 .background(
                     MaterialTheme.colorScheme.primaryContainer
-                ),
-            contentAlignment = Alignment.Center
+                )
         ) {
             if (viewModel.loadedBitmap != null) {
                 AsyncImage(
                     model = viewModel.loadedBitmap,
                     contentDescription = "Выбранное фото",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize(),
                 )
 
                 IconButton(
@@ -127,7 +129,8 @@ fun ClassifyScreen(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Сделать фото",
                         tint = MaterialTheme.colorScheme.onTertiary,
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier
+                            .size(36.dp)
                     )
                 }
 
@@ -187,26 +190,28 @@ fun ClassifyScreen(
             onClick = {
                 viewModel.predict()
             },
-            modifier = Modifier.width(288.dp),
-            enabled = viewModel.loadedBitmap != null
+            enabled = viewModel.loadedBitmap != null,
+            modifier = Modifier
+                .width(288.dp)
         ) {
             Text("Диагностика")
         }
 
         when(val state = predictionsState){
-            PredictionDataState.EmptyData -> {}
+            is PredictionDataState.EmptyData -> {}
+
             is PredictionDataState.Loading -> {
                 Spacer(modifier = Modifier.height(16.dp))
                 LoadingBox()
             }
+
             is PredictionDataState.Error -> {
                 Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-
                 ) {
                     ErrorCard(
                         title = "Ошибка обработки изображения",
@@ -214,139 +219,26 @@ fun ClassifyScreen(
                     )
                 }
             }
+
             is PredictionDataState.Success -> {
                 val modelPrediction = state.item
                 val confidences = modelPrediction.confidences
-                val myColors = generateGreenColors(confidences.size)
+                val confidenceLevel = modelPrediction.confidenceLevel
+                val myColors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary,
+                    MaterialTheme.colorScheme.tertiary,
+                )
 
-                Column(
+                DiagnosticResult(
+                    confidences = confidences,
+                    confidenceLevel = confidenceLevel,
+                    colors = myColors,
+                    onDiseaseClick = onDiseaseClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                ) {
-                    Text(
-                        "Результаты диагностики",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-
-                    Spacer(Modifier.height(8.dp))
-
-                    Card (
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.background
-                        ),
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .padding(vertical = 4.dp, horizontal = 8.dp)
-                                .fillMaxWidth()
-                        )
-                        {
-                            val diseases = confidences
-                                .mapNotNull { confidence ->
-                                    confidence.diseaseId?.let { diseaseId ->
-                                        diseaseId to confidence.diseaseName
-                                    }
-                                }
-                                .toMap()
-
-                            when (state.item.confidenceLevel) {
-
-                                ConfidenceLevel.HIGH -> {
-                                    TextWithLinks(
-                                        "Вероятный диагноз: ${confidences[0].diseaseName}",
-                                        diseases,
-                                        onDiseaseClick = { s -> onDiseaseClick(s) },
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        textAlign = TextAlign.Justify
-                                    )
-                                }
-
-                                ConfidenceLevel.MEDIUM -> {
-                                    TextWithLinks(
-                                        "Вероятный диагноз: ${confidences[0].diseaseName}\n" +
-                                                "Однако есть основания для другого диагноза: ${confidences[1].diseaseName}",
-                                        diseases,
-                                        onDiseaseClick = { s -> onDiseaseClick(s) },
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        textAlign = TextAlign.Justify
-                                    )
-                                }
-
-                                ConfidenceLevel.LOW -> {
-                                    Text(
-                                        "Не удалось однозначно определить диагноз. Попробуйте сделать фотограию при лучшем освещении или с другого ракурса.",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        textAlign = TextAlign.Justify
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    Spacer(Modifier.height(16.dp))
-
-                    Card (
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        ),
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            ConfidencePieChart(
-                                confidences.map { it.confidence },
-                                modifier = Modifier.size(128.dp),
-                                defaultColors = myColors,
-                            )
-
-                            Spacer(Modifier.width(8.dp))
-
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
-                                confidences.forEachIndexed { idx, precision ->
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(vertical = 8.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-
-                                    ) {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                        ) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(28.dp)
-                                                    .clip(RoundedCornerShape(16.dp))
-                                                    .background(
-                                                        myColors[idx]
-                                                    ),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text(
-                                                    (idx + 1).toString(),
-                                                    color = MaterialTheme.colorScheme.onPrimary
-                                                )
-                                            }
-
-                                            Spacer(modifier = Modifier.width(4.dp))
-
-                                            Text(precision.diseaseName)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                )
             }
         }
     }

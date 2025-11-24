@@ -74,7 +74,8 @@ fun MarkableIcon(
 
     Box(
 
-        modifier = modifier.background(
+        modifier = modifier
+            .background(
             stylePicker.getMainColor(isMarked),
             RoundedCornerShape(50)
             )
@@ -94,14 +95,16 @@ fun MarkableIcon(
                 text = stylePicker.getText(isMarked),
                 color = stylePicker.getTextColor(isMarked),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier
+                    .padding(end = 8.dp)
             )
 
             Icon(
                 painter = painterResource(id = stylePicker.getIconId(isMarked)),
                 contentDescription = description,
                 tint = stylePicker.getIconColor(isMarked),
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier
+                    .size(16.dp)
             )
         }
     }

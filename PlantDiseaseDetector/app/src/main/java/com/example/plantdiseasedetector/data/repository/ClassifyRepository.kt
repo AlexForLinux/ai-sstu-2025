@@ -51,7 +51,9 @@ class ClassifyRepositoryImpl @Inject constructor (
 
             val expandDiseaseConfidences =
             topAnswers.map { confidence ->
-                val disease = diseases.find { disease ->  disease.className == confidence.className }
+                val disease = diseases.find { disease ->
+                    disease.className == confidence.className
+                }
 
                 if (disease == null){
                     return@map ExpandDiseaseConfidence(

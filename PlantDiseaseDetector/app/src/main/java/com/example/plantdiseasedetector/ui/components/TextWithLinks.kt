@@ -70,7 +70,7 @@ fun TextWithLinks(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .background(
-                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.primary,
                             RoundedCornerShape(4.dp)
                         )
                         .padding(horizontal = 2.dp)
@@ -79,14 +79,16 @@ fun TextWithLinks(
                 ) {
                     Text(
                         text = name,
-                        style = style
+                        style = style,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
+
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                     )

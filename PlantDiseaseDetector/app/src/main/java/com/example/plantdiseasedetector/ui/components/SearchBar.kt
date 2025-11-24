@@ -64,8 +64,6 @@ fun SearchBar(
             BasicTextField(
                 value = query,
                 onValueChange = { newValue -> query = newValue },
-                modifier = Modifier
-                    .padding(vertical = 4.dp, horizontal = 8.dp),
                 singleLine = true,
                 textStyle = MaterialTheme.typography.bodyLarge,
                 decorationBox = { innerTextField ->
@@ -79,9 +77,8 @@ fun SearchBar(
                     innerTextField()
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(
-                    onSearch = {  }
-                )
+                modifier = Modifier
+                    .padding(vertical = 4.dp, horizontal = 8.dp),
             )
         }
 
@@ -99,7 +96,9 @@ fun SearchBar(
                 imageVector = Icons.Filled.Search,
                 contentDescription = "Поиск",
                 tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(40.dp).padding(4.dp)
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(4.dp)
             )
         }
 
@@ -119,7 +118,9 @@ fun SearchBar(
                 imageVector = Icons.Filled.Close,
                 contentDescription = "Очистить",
                 tint = MaterialTheme.colorScheme.onSecondary,
-                modifier = Modifier.size(40.dp).padding(4.dp)
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(4.dp)
             )
         }
     }

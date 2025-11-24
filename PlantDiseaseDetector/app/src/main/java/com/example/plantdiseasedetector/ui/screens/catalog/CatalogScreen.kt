@@ -68,13 +68,16 @@ fun CatalogScreen(
                 .fillMaxWidth()
         ) {
             SearchBar(
-                modifier = Modifier.weight(1f),
                 onQuery = {
                     query -> viewModel.setQuery(query)
                     viewModel.updateDiseaseList()
-                }
+                },
+                modifier = Modifier
+                    .weight(1f),
             )
+
             Spacer(Modifier.width(8.dp))
+
             FilterBar(
                 onState = {
                     filter -> viewModel.setFilter(filter)
@@ -89,10 +92,10 @@ fun CatalogScreen(
 
             is DiseaseListState.Loading -> {
                 Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
                     LoadingBox(size = 128.dp)

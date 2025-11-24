@@ -30,7 +30,6 @@ class ImageRepositoryImpl @Inject constructor(
         private const val IMAGE_DIRECTORY = "plant_disease_images"
     }
 
-    // Сохранение Bitmap и возвращение пути
     override suspend fun saveBitmap(bitmap: Bitmap, fileName: String): String? {
         return withContext(Dispatchers.IO) {
             try {
@@ -54,7 +53,6 @@ class ImageRepositoryImpl @Inject constructor(
         }
     }
 
-    // Загрузка Bitmap по пути
     override suspend fun loadBitmap(filePath: String): Bitmap? {
         return withContext(Dispatchers.IO) {
             try {
@@ -66,7 +64,6 @@ class ImageRepositoryImpl @Inject constructor(
         }
     }
 
-    // Удаление изображения
     override suspend fun deleteImage(filePath: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
@@ -78,7 +75,6 @@ class ImageRepositoryImpl @Inject constructor(
         }
     }
 
-    // Генерация уникального имени файла
     override fun generateFileName(): String {
         return "image_${System.currentTimeMillis()}"
     }

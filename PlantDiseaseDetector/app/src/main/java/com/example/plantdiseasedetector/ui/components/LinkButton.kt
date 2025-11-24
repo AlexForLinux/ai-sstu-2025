@@ -46,7 +46,8 @@ fun LinkButton(
             style = MaterialTheme.typography.bodyLarge.copy(
                 textDecoration = TextDecoration.Underline
             ),
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier
+                .padding(end = 8.dp)
         )
 
         Box(
@@ -59,7 +60,7 @@ fun LinkButton(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                contentDescription = null,
+                contentDescription = "Ссылка",
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .size(16.dp)

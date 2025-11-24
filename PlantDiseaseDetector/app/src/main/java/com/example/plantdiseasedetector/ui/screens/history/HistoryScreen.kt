@@ -1,5 +1,6 @@
 package com.example.plantdiseasedetector.ui.screens.history
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantdiseasedetector.ui.components.DiseaseCard
+import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.FilterBar
 import com.example.plantdiseasedetector.ui.components.HistoryCard
 import com.example.plantdiseasedetector.ui.components.LoadingBox
@@ -69,14 +71,16 @@ fun HistoryScreen(
 
             is HistoryDataState.Loading -> {
                 Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(top = 24.dp)
                         .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
                     LoadingBox(size = 128.dp)
+
                     Spacer(Modifier.height(8.dp))
+
                     Text(
                         "Загрузка данных ...",
                         style = MaterialTheme.typography.titleMedium
@@ -85,7 +89,9 @@ fun HistoryScreen(
             }
 
             is HistoryDataState.Success -> {
+
                 val reports = state.reports
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -96,10 +102,11 @@ fun HistoryScreen(
                             report = detailedReport,
                             image = imagesState[detailedReport.report.id],
                             onDelete = onDelete,
-                            modifier = Modifier.padding(vertical = 8.dp),
                             colors = listOf(
                                 MaterialTheme.colorScheme.primary
-                            )
+                            ),
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
                         )
                     }
 
@@ -110,9 +117,19 @@ fun HistoryScreen(
             }
 
             is HistoryDataState.Error -> {
-
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                ) {
+                    ErrorCard(
+                        title = "Ошибка обработки изображения",
+                        description = state.message
+                    )
+                }
             }
         }
     }
-
 }
