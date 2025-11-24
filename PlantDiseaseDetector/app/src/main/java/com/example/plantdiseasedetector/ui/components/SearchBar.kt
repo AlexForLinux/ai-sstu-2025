@@ -3,9 +3,13 @@ package com.example.plantdiseasedetector.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -39,42 +43,47 @@ fun SearchBar(
 
     var query by remember { mutableStateOf("") }
 
-    Row(
+    Row (
         modifier = modifier
-            .background(
-                MaterialTheme.colorScheme.surface
-            )
-            .border(
-                1.dp,
-                MaterialTheme.colorScheme.primary,
-                RoundedCornerShape(12.dp)
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        BasicTextField(
-            value = query,
-            onValueChange = { newValue -> query = newValue },
+    ) {
+        Row(
             modifier = Modifier
-                .padding(vertical = 4.dp, horizontal = 8.dp)
+                .background(
+                    MaterialTheme.colorScheme.surface
+                )
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.primary,
+                    RoundedCornerShape(12.dp, 0.dp,0.dp, 12.dp)
+                )
+                .height(48.dp)
                 .weight(1f)
             ,
-            singleLine = true,
-            textStyle = MaterialTheme.typography.bodyLarge,
-            decorationBox = { innerTextField ->
-                if (query.isEmpty()) {
-                    Text(
-                        text = "Поиск по описанию ...",
-                        color = Color.Gray,
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                }
-                innerTextField()
-            },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(
-                onSearch = {  }
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            BasicTextField(
+                value = query,
+                onValueChange = { newValue -> query = newValue },
+                modifier = Modifier
+                    .padding(vertical = 4.dp, horizontal = 8.dp),
+                singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
+                decorationBox = { innerTextField ->
+                    if (query.isEmpty()) {
+                        Text(
+                            text = "Поиск по описанию ...",
+                            color = Color.Gray,
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
+                    innerTextField()
+                },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {  }
+                )
             )
-        )
+        }
 
         IconButton(
             onClick = {
@@ -84,12 +93,13 @@ fun SearchBar(
                 .background(
                     MaterialTheme.colorScheme.primary,
                 )
+                .size(48.dp)
         ) {
             Icon(
                 imageVector = Icons.Filled.Search,
                 contentDescription = "Поиск",
                 tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.fillMaxSize().padding(4.dp)
+                modifier = Modifier.size(40.dp).padding(4.dp)
             )
         }
 
@@ -103,12 +113,13 @@ fun SearchBar(
                     MaterialTheme.colorScheme.secondary,
                     RoundedCornerShape(0.dp, 12.dp, 12.dp,0.dp)
                 )
+                .size(48.dp)
         ) {
             Icon(
                 imageVector = Icons.Filled.Close,
-                contentDescription = "Поиск",
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.fillMaxSize().padding(4.dp)
+                contentDescription = "Очистить",
+                tint = MaterialTheme.colorScheme.onSecondary,
+                modifier = Modifier.size(40.dp).padding(4.dp)
             )
         }
     }

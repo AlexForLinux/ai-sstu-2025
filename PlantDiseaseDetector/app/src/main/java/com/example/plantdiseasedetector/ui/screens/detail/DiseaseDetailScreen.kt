@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -108,13 +109,18 @@ fun DiseaseDetailScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+
+                    MarkableIcon(
+                        marked = disease.marked,
+                        onMarkChange = onMarkChangedCallback,
+                        modifier = Modifier
+                    )
+
                     Text(
                         text = disease.name,
                         style = MaterialTheme.typography.headlineMedium,
@@ -122,14 +128,19 @@ fun DiseaseDetailScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    MarkableIcon(
-                        marked = disease.marked,
-                        onMarkChange = onMarkChangedCallback
+                    Text(
+                        text = disease.description,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Justify
                     )
 
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
 
                 Image(
                     painter = painterResource(id = disease.imageId),
@@ -137,19 +148,6 @@ fun DiseaseDetailScreen(
                     modifier = Modifier
                         .size(288.dp)
                         .clip(RoundedCornerShape(16.dp))
-                )
-
-                Text(
-                    text = disease.description,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    textAlign = TextAlign.Left
                 )
 
                 Column(

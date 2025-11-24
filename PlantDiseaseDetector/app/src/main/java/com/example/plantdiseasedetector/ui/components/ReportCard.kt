@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -57,14 +59,18 @@ fun ReportCard(
     modifier: Modifier = Modifier
 ) {
 
-    Box () {
+    Box (
+        modifier = modifier
+    ) {
 
         Card (
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            modifier = modifier
+            modifier = Modifier
+                .fillMaxWidth()
+
         ) {
 
             Column (
@@ -96,7 +102,7 @@ fun ReportCard(
                     ) {
                         AsyncImage(
                             model = image,
-                            contentDescription = "Выбранное фото",
+                            contentDescription = "Фото",
                             modifier = Modifier.size(112.dp),
                             contentScale = ContentScale.Crop
                         )
@@ -156,28 +162,26 @@ fun ReportCard(
             }
         }
 
-        IconButton (
-            onClick = {
-                onDelete(report.report.id)
-            },
-            modifier = modifier
-                .size(24.dp)
+        Box(
+            modifier = Modifier
+                .size(28.dp)
                 .align(Alignment.TopEnd)
-                .offset((-8).dp, 8.dp)
-                .clip(RoundedCornerShape(4.dp))
-            ,
-            colors = IconButtonColors(
-                containerColor = Color.Red,
-                contentColor = Color.White,
-                disabledContainerColor = Color.Gray,
-                disabledContentColor = Color.LightGray
-            )
+                .offset(x = (-4).dp, y = (4).dp)
+                .background(
+                    MaterialTheme.colorScheme.tertiary,
+                    RoundedCornerShape(8.dp)
+                )
+                .clickable(onClick = {
+                    onDelete(report.report.id)
+                })
+
         ) {
             Icon(
                 imageVector = Icons.Filled.Clear,
-                contentDescription = "Удалить",
+                contentDescription = "Сделать фото",
+                tint = MaterialTheme.colorScheme.onTertiary,
+                modifier = Modifier.size(24.dp).align(Alignment.Center)
             )
         }
     }
-
 }

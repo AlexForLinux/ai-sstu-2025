@@ -30,7 +30,9 @@ class DiseaseVM @Inject constructor (
 
 
     var queryState = MutableStateFlow<String>("")
+        private set
     var filterState = MutableStateFlow<Boolean?>(null)
+        private set
 
     init {
         updateDiseaseList()

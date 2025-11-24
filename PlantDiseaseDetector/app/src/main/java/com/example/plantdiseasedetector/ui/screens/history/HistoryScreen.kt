@@ -96,8 +96,10 @@ fun HistoryScreen(
                             report = detailedReport,
                             image = imagesState[detailedReport.report.id],
                             onDelete = onDelete,
-                            modifier = Modifier
-                                .padding(vertical = 8.dp)
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary
+                            )
                         )
                     }
 
