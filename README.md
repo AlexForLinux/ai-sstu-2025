@@ -8,7 +8,7 @@
     - colab: <https://colab.research.google.com/drive/1oMEN5bfms0DFudkMMg4GK-tEwGy_vIsL?usp=sharing>
 3. Разработка системы
     - исходный код: <https://github.com/AlexForLinux/ai-sstu-2025/tree/main/PlantDiseaseDetector/app>
-    - apk: <https://drive.google.com/drive/folders/1CNydHQ77J6tSy6Lao3UBpmNq465NU7Xt?usp=sharing>
+    - android app bundle: <https://drive.google.com/drive/folders/1CNydHQ77J6tSy6Lao3UBpmNq465NU7Xt?usp=sharing>
     - learning.ipynb: <https://github.com/AlexForLinux/ai-sstu-2025/blob/main/cnn-learning/learning.ipynb>
 4. Выходной материал
     - В процессе...
@@ -93,7 +93,7 @@ Plant Disease Diagnoser - мобильное приложение для диа�
 - ReportDao - доступ к истории отчетов (Room)
 - PlantDiseaseAI - EfficientNet модель для классификации
 
-## Характеристики обученнлй модели
+## Характеристики обученной модели
 - Точность (Accuracy): **88%**
 - Precision, Recall и F1-Score:
 
