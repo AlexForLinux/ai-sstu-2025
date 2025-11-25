@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -147,15 +148,32 @@ fun ReportCard(
 
                         Box(
                             modifier = Modifier
+                                .size(112.dp)
+                                .background(
+                                    Color.LightGray,
+                                    RoundedCornerShape(12.dp)
+                                )
                                 .clip(RoundedCornerShape(12.dp))
                         ) {
-                            AsyncImage(
-                                model = image,
-                                contentDescription = "Фото",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(112.dp),
-                            )
+                            if (image != null) {
+                                AsyncImage(
+                                    model = image,
+                                    contentDescription = "Фото",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(112.dp),
+                                )
+                            }
+                            else {
+                                Icon(
+                                    imageVector = Icons.Filled.Clear,
+                                    contentDescription = "Пустое изображение",
+                                    tint = Color.Gray,
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                        .align(Alignment.Center)
+                                )
+                            }
                         }
 
                         Spacer(Modifier.width(8.dp))

@@ -54,6 +54,7 @@ fun ClassifyScreen(
     onDiseaseClick: (Long) -> Unit
 ) {
     val predictionsState by viewModel.predictionsState.collectAsState()
+    val bitmap by viewModel.loadedBitmap.collectAsState()
 
     val context = LocalContext.current
 
@@ -101,9 +102,9 @@ fun ClassifyScreen(
                     MaterialTheme.colorScheme.primaryContainer
                 )
         ) {
-            if (viewModel.loadedBitmap != null) {
+            if (bitmap != null) {
                 AsyncImage(
-                    model = viewModel.loadedBitmap,
+                    model = bitmap,
                     contentDescription = "Выбранное фото",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

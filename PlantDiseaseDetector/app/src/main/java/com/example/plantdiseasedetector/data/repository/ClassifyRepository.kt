@@ -10,7 +10,7 @@ import com.example.plantdiseasedetector.data.model.DiseaseConfidence
 import javax.inject.Inject
 
 interface ClassifyRepository {
-    suspend fun predict(bitmap: Bitmap?): ModelPrediction
+    suspend fun predict(bitmap: Bitmap): ModelPrediction
 }
 
 class ClassifyRepositoryImpl @Inject constructor (
@@ -18,60 +18,55 @@ class ClassifyRepositoryImpl @Inject constructor (
     private val diseaseDao: DiseaseDao
 ) : ClassifyRepository {
 
-    override suspend fun predict(bitmap: Bitmap?): ModelPrediction {
+    override suspend fun predict(bitmap: Bitmap): ModelPrediction {
 
-        if (bitmap == null){
-            throw IllegalArgumentException("Получено пустое изображение")
+        val diseaseConfidences = plantDiseaseAI.classifyByBitmap(bitmap)
+        val top1Answer = diseaseConfidences[0]
+
+        var topAnswers : List<DiseaseConfidence>
+        var confidenceLevel : ConfidenceLevel
+
+        if (top1Answer.confidence >= 0.80f){
+            topAnswers = diseaseConfidences.take(1)
+            confidenceLevel = ConfidenceLevel.HIGH
+        }
+        else if (top1Answer.confidence >= 0.50f) {
+            topAnswers = diseaseConfidences.take(2)
+            confidenceLevel = ConfidenceLevel.MEDIUM
         }
         else {
-            val diseaseConfidences = plantDiseaseAI.classifyByBitmap(bitmap)
-            val top1Answer = diseaseConfidences[0]
+            topAnswers = diseaseConfidences.take(3)
+            confidenceLevel = ConfidenceLevel.LOW
+        }
 
-            var topAnswers : List<DiseaseConfidence>
-            var confidenceLevel : ConfidenceLevel
+        val diseases = diseaseDao.getDiseaseByClassNames(
+            topAnswers.map {it.className}
+        )
 
-            if (top1Answer.confidence >= 0.80f){
-                topAnswers = diseaseConfidences.take(1)
-                confidenceLevel = ConfidenceLevel.HIGH
-            }
-            else if (top1Answer.confidence >= 0.50f) {
-                topAnswers = diseaseConfidences.take(2)
-                confidenceLevel = ConfidenceLevel.MEDIUM
-            }
-            else {
-                topAnswers = diseaseConfidences.take(3)
-                confidenceLevel = ConfidenceLevel.LOW
+        val expandDiseaseConfidences =
+        topAnswers.map { confidence ->
+            val disease = diseases.find { disease ->
+                disease.className == confidence.className
             }
 
-            val diseases = diseaseDao.getDiseaseByClassNames(
-                topAnswers.map {it.className}
-            )
-
-            val expandDiseaseConfidences =
-            topAnswers.map { confidence ->
-                val disease = diseases.find { disease ->
-                    disease.className == confidence.className
-                }
-
-                if (disease == null){
-                    return@map ExpandDiseaseConfidence(
-                        confidence,
-                        null,
-                        "Здоровое растение"
-                    )
-                }
-
+            if (disease == null){
                 return@map ExpandDiseaseConfidence(
                     confidence,
-                    disease.id,
-                    disease.name
+                    null,
+                    "Здоровое растение"
                 )
             }
 
-            return ModelPrediction(
-                confidenceLevel,
-                expandDiseaseConfidences
+            return@map ExpandDiseaseConfidence(
+                confidence,
+                disease.id,
+                disease.name
             )
         }
+
+        return ModelPrediction(
+            confidenceLevel,
+            expandDiseaseConfidences
+        )
     }
 }

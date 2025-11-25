@@ -24,11 +24,11 @@ class ClassifyVM @Inject constructor (
     private val imageRepository: ImageRepository
 ) : ViewModel() {
 
-    var loadedBitmap by mutableStateOf<Bitmap?>(null)
+    var loadedBitmap = MutableStateFlow<Bitmap?>(null)
         private set
 
     fun setBitmap(bitmap: Bitmap?){
-        loadedBitmap = bitmap
+        loadedBitmap.value = bitmap
         setEmptyData()
     }
     private val _predictionsState = MutableStateFlow<PredictionDataState>(PredictionDataState.EmptyData)
@@ -41,7 +41,7 @@ class ClassifyVM @Inject constructor (
         _predictionsState.value = PredictionDataState.Loading
 
         viewModelScope.launch {
-            loadedBitmap?.let {
+            loadedBitmap.value?.let {
                 try {
                     val modelPrediction = classifyRepository.predict(it)
                     _predictionsState.value = PredictionDataState.Success(modelPrediction)
@@ -53,10 +53,8 @@ class ClassifyVM @Inject constructor (
                         )
                     }
 
-                    val imageFileName = imageRepository.generateFileName()
-                    val imagePath = imageRepository.saveBitmap(loadedBitmap!!, imageFileName)
-                    if (imagePath != null)
-                        historyRepository.createReport(imagePath, items)
+                    val imagePath = imageRepository.saveBitmap(it)
+                    historyRepository.createReport(imagePath, items)
                 }
                 catch (e: Exception){
                     _predictionsState.value = PredictionDataState.Error(

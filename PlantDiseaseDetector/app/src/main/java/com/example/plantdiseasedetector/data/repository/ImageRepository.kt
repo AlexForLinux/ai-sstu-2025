@@ -12,41 +12,36 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 interface ImageRepository {
-    suspend fun saveBitmap(bitmap: Bitmap, fileName: String): String?
+    suspend fun saveBitmap(bitmap: Bitmap): String
     suspend fun loadBitmap(filePath: String): Bitmap?
-    suspend fun deleteImage(filePath: String): Boolean
-    fun generateFileName(): String
+    suspend fun deleteImage(filePath: String)
 }
 
 class ImageRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : ImageRepository {
 
     companion object {
-        private const val IMAGE_QUALITY = 90
+        private const val IMAGE_QUALITY = 80
         private const val IMAGE_DIRECTORY = "plant_disease_images"
     }
 
-    override suspend fun saveBitmap(bitmap: Bitmap, fileName: String): String? {
+    override suspend fun saveBitmap(bitmap: Bitmap): String {
         return withContext(Dispatchers.IO) {
-            try {
-                val imagesDir = File(context.filesDir, IMAGE_DIRECTORY)
-                if (!imagesDir.exists()) {
-                    imagesDir.mkdirs()
-                }
-
-                val imageFile = File(imagesDir, "$fileName.jpg")
-                val outputStream = FileOutputStream(imageFile)
-
-                bitmap.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, outputStream)
-                outputStream.flush()
-                outputStream.close()
-
-                imageFile.absolutePath
-            } catch (e: Exception) {
-                Log.e("ImageRepository", "Error saving bitmap: ${e.message}")
-                null
+            val imagesDir = File(context.filesDir, IMAGE_DIRECTORY)
+            if (!imagesDir.exists()) {
+                imagesDir.mkdirs()
             }
+
+            val fileName = generateFileName()
+            val imageFile = File(imagesDir, "$fileName.jpg")
+            val outputStream = FileOutputStream(imageFile)
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            imageFile.absolutePath
         }
     }
 
@@ -54,25 +49,20 @@ class ImageRepositoryImpl @Inject constructor(
         return withContext(Dispatchers.IO) {
             try {
                 BitmapFactory.decodeFile(filePath)
-            } catch (e: Exception) {
-                Log.e("ImageRepository", "Error loading bitmap: ${e.message}")
+            }
+            catch (e: Exception){
                 null
             }
         }
     }
 
-    override suspend fun deleteImage(filePath: String): Boolean {
+    override suspend fun deleteImage(filePath: String) {
         return withContext(Dispatchers.IO) {
-            try {
-                File(filePath).delete()
-            } catch (e: Exception) {
-                Log.e("ImageRepository", "Error deleting image: ${e.message}")
-                false
-            }
+            File(filePath).delete()
         }
     }
 
-    override fun generateFileName(): String {
+    private fun generateFileName(): String {
         return "image_${System.currentTimeMillis()}"
     }
 }

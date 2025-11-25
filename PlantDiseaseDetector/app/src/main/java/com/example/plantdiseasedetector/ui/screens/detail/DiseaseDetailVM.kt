@@ -1,16 +1,12 @@
 package com.example.plantdiseasedetector.ui.screens.detail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.data.repository.DiseaseRepository
-import com.example.plantdiseasedetector.ui.screens.history.HistoryDataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +19,7 @@ class DiseaseDetailVM @Inject constructor (
     val diseaseState: StateFlow<DiseaseDataState> = _diseaseState.asStateFlow()
 
     fun setErrorState(message: String) {
-        var fullMessage = "Не удалось загузить сведения"
+        var fullMessage = "Ошибка страницы"
 
         if (!message.isEmpty()) {
             fullMessage += ": $message"
@@ -39,14 +35,18 @@ class DiseaseDetailVM @Inject constructor (
                 val disease = repository.getDiseaseWithAdviceById(diseaseId)
                 _diseaseState.value = DiseaseDataState.Success(disease)
             } catch (e: Exception) {
-                setErrorState("")
+                setErrorState("Не удалось загрузить сведения")
             }
         }
     }
 
     fun updateDiseaseMark(id: Long, isMarked: Boolean){
         viewModelScope.launch {
-            repository.updateDiseaseMark(id, isMarked)
+            try {
+                repository.updateDiseaseMark(id, isMarked)
+            } catch (e: Exception) {
+                setErrorState("Не удалось добавить в закладки")
+            }
         }
     }
 }

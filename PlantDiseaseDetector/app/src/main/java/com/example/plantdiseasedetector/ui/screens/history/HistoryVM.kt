@@ -38,12 +38,14 @@ class HistoryVM @Inject constructor (
     fun load() {
         viewModelScope.launch {
             _historyState.value = HistoryDataState.Loading
+
             try {
                 val reports = historyRepository.getAllReports()
                 _historyState.value = HistoryDataState.Success(reports)
 
                 val res = reports.associate { report ->
-                    report.report.id to imageRepository.loadBitmap(report.report.imagePath)
+                    report.report.id to
+                            imageRepository.loadBitmap(report.report.imagePath)
                 }
 
                 _imagesCache.value = res
@@ -62,14 +64,19 @@ class HistoryVM @Inject constructor (
                     val item = state.reports.find { (report, _) -> report.id == reportId }
 
                     if (item != null) {
-                        imageRepository.deleteImage(item.report.imagePath).let {
-                            historyRepository.deleteReport(reportId).let {
-                                _historyState.value = HistoryDataState.Success(
-                                    state.reports.filter {
-                                        it.report.id != reportId
-                                    }
-                                )
-                            }
+                        try {
+                            imageRepository.deleteImage(item.report.imagePath)
+                            historyRepository.deleteReport(reportId)
+
+                            _historyState.value = HistoryDataState.Success(
+                                state.reports.filter {
+                                    it.report.id != reportId
+                                }
+                            )
+                        }
+                        catch (e: Exception) {
+                            _historyState.value =
+                                HistoryDataState.Error("Не удалось удалить отчет")
                         }
                     }
                 }
