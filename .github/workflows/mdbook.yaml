@@ -36,7 +36,7 @@ jobs:
           sudo cp target/release/mdbook-drawio /usr/local/bin/
 
       - name: Build Book
-        run: mdbook build
+        run: cargo install mdbook --version 0.4.35 && mdbook build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
