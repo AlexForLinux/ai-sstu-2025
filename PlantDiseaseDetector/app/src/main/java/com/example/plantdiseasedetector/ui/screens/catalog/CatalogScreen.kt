@@ -105,21 +105,34 @@ fun CatalogScreen(
             is DiseaseListState.Success -> {
                 val diseases = state.diseases
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    items(
-                        items = diseases,
-                        key = {it.id}
-                    ) { disease ->
-                        DiseaseCard(
-                            disease = disease,
-                            onNavigateClick = onDiseaseClick,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                        )
+                if (diseases.isEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        "Ничего не найдено",
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+                else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        items(
+                            items = diseases,
+                            key = {it.id}
+                        ) { disease ->
+                            DiseaseCard(
+                                disease = disease,
+                                onNavigateClick = onDiseaseClick,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                            )
+                        }
                     }
                 }
             }

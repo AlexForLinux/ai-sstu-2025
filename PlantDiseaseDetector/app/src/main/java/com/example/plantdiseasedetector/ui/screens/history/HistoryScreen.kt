@@ -99,7 +99,15 @@ fun HistoryScreen(
                     }
 
                     if (reports.isEmpty()) {
-                        Text("Нет данных о диагностике")
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                            "Нет сведений о диагностике",
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
                     }
                 }
             }

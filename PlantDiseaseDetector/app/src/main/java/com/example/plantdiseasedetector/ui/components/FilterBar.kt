@@ -32,7 +32,7 @@ fun FilterBar(
 
     IconButton(
         onClick = {
-            when (val st = state) {
+            when (state) {
                 FilterState.NO_FILTER -> {
                     state = FilterState.MARKED
                     onState(true)
