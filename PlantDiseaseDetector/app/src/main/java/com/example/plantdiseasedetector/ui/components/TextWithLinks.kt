@@ -56,7 +56,7 @@ fun TextWithLinks(
                 Placeholder(
                     width = totalWidth,
                     height = 20.sp,
-                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+                    placeholderVerticalAlign = PlaceholderVerticalAlign.Bottom
                 )
             ) {
                 Row(
