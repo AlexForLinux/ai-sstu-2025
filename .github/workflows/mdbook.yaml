@@ -18,7 +18,7 @@ jobs:
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v1
         with:
-          mdbook-version: "latest"
+          mdbook-version: "0.4.35"
 
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
@@ -37,7 +37,7 @@ jobs:
           sudo cp target/release/mdbook-drawio /usr/local/bin/
 
       - name: Build Book
-        run: cargo install mdbook --version 0.4.35 && mdbook build
+        run: mdbook build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
