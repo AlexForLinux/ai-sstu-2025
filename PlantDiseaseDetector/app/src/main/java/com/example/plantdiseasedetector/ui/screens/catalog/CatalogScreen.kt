@@ -1,9 +1,6 @@
 package com.example.plantdiseasedetector.ui.screens.catalog
 
 
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,17 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.plantdiseasedetector.R
 import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.ui.components.DiseaseCard
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.FilterBar
 import com.example.plantdiseasedetector.ui.components.LoadingBox
@@ -109,6 +102,7 @@ fun CatalogScreen(
 
             is DiseaseListState.Success -> {
                 val diseases = state.diseases
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -130,7 +124,7 @@ fun CatalogScreen(
 
             is DiseaseListState.Error -> {
                 ErrorCard(
-                    "Ошибка",
+                    "Ошибка загрузки",
                     state.message
                 )
             }

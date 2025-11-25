@@ -1,13 +1,8 @@
 package com.example.plantdiseasedetector.data.repository
 
-import android.util.Log
-import androidx.compose.ui.text.toLowerCase
 import com.example.plantdiseasedetector.data.dao.DiseaseDao
 import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.data.model.DiseaseWithAdvice
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 interface DiseaseRepository {
@@ -43,16 +38,6 @@ class DiseaseRepositoryImpl @Inject constructor (
             (filter == null || disease.marked == filter)
             && disease.description.lowercase().contains(query.lowercase())
         }
-
-        /* I believe it's excessive for 4 items to use db search, so...*/
-
-//        if (filter != null){
-//            if (query.isEmpty()) return diseaseDao.getDiseasesByMark(filter)
-//            return diseaseDao.getDiseasesByQueryAndMark(query, filter)
-//        }
-//
-//        if (!query.isEmpty()) return diseaseDao.getDiseasesByQuery(query)
-//        return diseaseDao.getDiseases()
     }
 
     override suspend fun updateDiseaseMark(id: Long, isMarked: Boolean) {

@@ -14,18 +14,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun ErrorCard(
@@ -33,12 +30,16 @@ fun ErrorCard(
     description: String,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Card (
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer
+        ),
         modifier = modifier
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
             Row (
                 horizontalArrangement = Arrangement.Center,
@@ -50,7 +51,7 @@ fun ErrorCard(
                     modifier = Modifier
                         .size(40.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.secondary,
+                            color = MaterialTheme.colorScheme.tertiary,
                             shape = RoundedCornerShape(20.dp)
                         ),
                     contentAlignment = Alignment.Center
@@ -77,7 +78,7 @@ fun ErrorCard(
 
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }

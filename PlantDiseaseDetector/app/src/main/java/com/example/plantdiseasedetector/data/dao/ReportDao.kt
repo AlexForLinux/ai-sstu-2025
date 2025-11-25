@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.data.model.Report
 import com.example.plantdiseasedetector.data.model.ReportDetailedItem
 import com.example.plantdiseasedetector.data.model.ReportItem

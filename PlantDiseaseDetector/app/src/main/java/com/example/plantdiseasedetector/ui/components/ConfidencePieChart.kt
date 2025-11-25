@@ -13,15 +13,15 @@ import kotlin.math.sin
 
 @Composable
 fun ConfidencePieChart(
+    modifier: Modifier = Modifier,
     confidences: List<Float>,
     showLabels: Boolean = true,
-    modifier: Modifier = Modifier,
     defaultColors: List<Color> = generateGreenColors(confidences.size),
     grayColor: Color = Color.Gray.copy(alpha = 0.5f)
 ) {
-    require(confidences.isNotEmpty()) { "Precisions list cannot be empty" }
-    require(confidences.all { it >= 0 }) { "All precision values must be non-negative" }
-    require(confidences.sum() <= 1.0f) { "All precision values must be non-negative" }
+    require(confidences.isNotEmpty()) { "Пустой список уверенностей" }
+    require(confidences.all { it >= 0 }) { "Список содержит отрицательные элементы" }
+    require(confidences.sum() <= 1.0f) { "Сумма уверенностей превысила 100%" }
 
     Canvas (
         modifier = modifier

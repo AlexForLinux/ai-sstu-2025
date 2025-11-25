@@ -4,15 +4,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import com.example.plantdiseasedetector.data.model.ReportItem
-import com.example.plantdiseasedetector.data.model.ReportWithDetails
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
-
 
 interface ImageRepository {
     suspend fun saveBitmap(bitmap: Bitmap, fileName: String): String?

@@ -23,8 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,7 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -44,13 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.plantdiseasedetector.R
-import com.example.plantdiseasedetector.data.model.ConfidenceLevel
-import com.example.plantdiseasedetector.ui.components.ConfidencePieChart
 import com.example.plantdiseasedetector.ui.components.DiagnosticResult
 import com.example.plantdiseasedetector.ui.components.ErrorCard
 import com.example.plantdiseasedetector.ui.components.LoadingBox
-import com.example.plantdiseasedetector.ui.components.TextWithLinks
-import com.example.plantdiseasedetector.ui.functions.generateGreenColors
 import com.example.plantdiseasedetector.ui.functions.uriToBitmap
 
 @Composable

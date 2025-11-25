@@ -1,13 +1,5 @@
 package com.example.myapp.ui.navigation
 
-import android.graphics.drawable.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import com.example.plantdiseasedetector.R
 
 sealed class BottomNavItem(

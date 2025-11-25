@@ -39,7 +39,7 @@ class DiseaseDetailVM @Inject constructor (
                 val disease = repository.getDiseaseWithAdviceById(diseaseId)
                 _diseaseState.value = DiseaseDataState.Success(disease)
             } catch (e: Exception) {
-                setErrorState(e.message ?: "")
+                setErrorState("")
             }
         }
     }

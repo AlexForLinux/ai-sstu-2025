@@ -2,7 +2,6 @@ package com.example.plantdiseasedetector.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity("reports")
 data class Report(

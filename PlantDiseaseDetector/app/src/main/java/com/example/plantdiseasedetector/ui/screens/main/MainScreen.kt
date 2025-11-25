@@ -75,7 +75,8 @@ fun MainScreen() {
                             Icon(
                                 painter = painterResource(item.drawableId),
                                 contentDescription = null,
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier
+                                    .size(40.dp)
                             )
                         },
                         modifier = Modifier

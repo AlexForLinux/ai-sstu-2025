@@ -8,16 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantdiseasedetector.data.model.ReportItem
 import com.example.plantdiseasedetector.data.repository.ClassifyRepository
-import com.example.plantdiseasedetector.data.repository.DiseaseRepository
 import com.example.plantdiseasedetector.data.repository.HistoryRepository
 import com.example.plantdiseasedetector.data.repository.ImageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,7 +60,7 @@ class ClassifyVM @Inject constructor (
                 }
                 catch (e: Exception){
                     _predictionsState.value = PredictionDataState.Error(
-                        "Не удалось обработать изображение: ${e.message}"
+                        "Не удалось обработать изображение"
                     )
                 }
             }

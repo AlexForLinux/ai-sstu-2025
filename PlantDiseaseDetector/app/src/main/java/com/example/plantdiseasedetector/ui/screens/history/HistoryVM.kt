@@ -49,7 +49,8 @@ class HistoryVM @Inject constructor (
                 _imagesCache.value = res
 
             } catch (e: Exception) {
-                _historyState.value = HistoryDataState.Error("Не удалось загузить историю: ${e.message}")
+                _historyState.value =
+                    HistoryDataState.Error("Не удалось загузить историю")
             }
         }
     }

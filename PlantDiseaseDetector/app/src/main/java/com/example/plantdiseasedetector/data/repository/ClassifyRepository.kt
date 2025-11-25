@@ -7,8 +7,6 @@ import com.example.plantdiseasedetector.data.model.ExpandDiseaseConfidence
 import com.example.plantdiseasedetector.data.model.ModelPrediction
 import com.example.plantdiseasedetector.data.model.ConfidenceLevel
 import com.example.plantdiseasedetector.data.model.DiseaseConfidence
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 interface ClassifyRepository {

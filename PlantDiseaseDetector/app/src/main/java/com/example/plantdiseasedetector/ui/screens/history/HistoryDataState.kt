@@ -1,6 +1,5 @@
 package com.example.plantdiseasedetector.ui.screens.history
 
-import com.example.plantdiseasedetector.data.model.Disease
 import com.example.plantdiseasedetector.data.model.ReportWithDetails
 
 sealed class HistoryDataState {
