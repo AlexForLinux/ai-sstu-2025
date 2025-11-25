@@ -34,13 +34,13 @@ Plant Disease Diagnoser - мобильное приложение для диа�
 
 ## Технологический стек
 
-[![Android](https://img.shields.io/badge/Android-6.0%2B-brightgreen)]()
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-blue)]()
-[![Compose](https://img.shields.io/badge/Jetpack%20Compose-1.5.0-orange)]()
-[![Hilt](https://img.shields.io/badge/DI-Dagger%20Hilt-red)]()
-[![Room](https://img.shields.io/badge/Database-Room%20DB-important)]()
-[![PyTorch](https://img.shields.io/badge/ML-PyTorch-ee4c2c)]()
-[![CNN](https://img.shields.io/badge/Model-CNN%20(EfficientNet)-9cf)]()
+[![Android](https://img.shields.io/badge/Android-3DDC84)]()
+[![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF)]()
+[![Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4)]()
+[![Hilt](https://img.shields.io/badge/DI-Dagger%20Hilt-DC2B02)]()
+[![Room](https://img.shields.io/badge/Database-Room%20DB-0F9D58)]()
+[![PyTorch](https://img.shields.io/badge/ML-PyTorch-EE4C2C)]()
+[![CNN](https://img.shields.io/badge/Model-CNN%20(EfficientNet)-1D63ED)]()
 
 ### Платформа и язык
 - Платформа: Android (min SDK - 28 (Android 9), target SDK - 36 (Android 16))
