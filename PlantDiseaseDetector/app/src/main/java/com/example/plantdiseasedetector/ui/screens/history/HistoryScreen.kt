@@ -55,8 +55,6 @@ fun HistoryScreen(
                 .padding(top = 8.dp)
         )
 
-        Spacer(Modifier.height(8.dp))
-
         when (val state = historyState) {
 
             is HistoryDataState.Loading -> {

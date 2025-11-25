@@ -76,24 +76,22 @@ fun DiagnosticResult(
                             diseases,
                             onDiseaseClick = { id -> onDiseaseClick(id) },
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Justify
                         )
                     }
 
                     ConfidenceLevel.MEDIUM -> {
                         TextWithLinks(
                             "Вероятный диагноз: ${confidences[0].diseaseName}\n" +
-                                    "Однако есть основания для другого диагноза: ${confidences[1].diseaseName}",
+                                    "Сверьтесь с каталогом. Есть вероятность другого диагноза: ${confidences[1].diseaseName}",
                             diseases,
                             onDiseaseClick = { id -> onDiseaseClick(id) },
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Justify
                         )
                     }
 
                     ConfidenceLevel.LOW -> {
                         Text(
-                            "Не удалось однозначно определить диагноз. Попробуйте сделать фотографию при лучшем освещении или с другого ракурса.",
+                            "Нет уверенности в определенном диагнозе. Сверьте возможные диагнозы с каталогом или попробуйте сделать фотографию с другого ракурса.",
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Justify
                         )
