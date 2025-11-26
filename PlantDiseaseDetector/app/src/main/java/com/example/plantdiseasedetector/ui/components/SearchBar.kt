@@ -30,10 +30,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SearchBar(
     modifier : Modifier = Modifier,
+    query: String,
     onQuery: (String) -> Unit
 ) {
 
-    var query by remember { mutableStateOf("") }
+    var query by remember { mutableStateOf(query) }
 
     Row (
         modifier = modifier

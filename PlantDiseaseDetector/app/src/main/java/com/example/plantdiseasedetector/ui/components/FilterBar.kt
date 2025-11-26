@@ -22,34 +22,35 @@ import com.example.plantdiseasedetector.ui.screens.catalog.FilterState
 @Composable
 fun FilterBar(
     modifier : Modifier = Modifier,
+    state: Boolean?,
     onState: (Boolean?) -> Unit,
     description: String? = null,
     iconChosen: Int =  R.drawable.filledbookmark,
     iconNotChosen: Int = R.drawable.crossedfilledbookmark,
 ) {
 
-    var state by remember { mutableStateOf(FilterState.NO_FILTER) }
+    var state by remember { mutableStateOf(state) }
 
     IconButton(
         onClick = {
             when (state) {
-                FilterState.NO_FILTER -> {
-                    state = FilterState.MARKED
+                null -> {
+                    state = true
                     onState(true)
                 }
-                FilterState.MARKED -> {
-                    state = FilterState.NOT_MARKED
+                true -> {
+                    state = false
                     onState(false)
                 }
-                FilterState.NOT_MARKED -> {
-                    state = FilterState.NO_FILTER
+                false -> {
+                    state = null
                     onState(null)
                 }
             }
         },
         modifier = modifier
             .background(
-                color = if (state == FilterState.NO_FILTER)
+                color = if (state == null)
                             Color.LightGray
                         else
                             MaterialTheme.colorScheme.primary,
@@ -58,13 +59,13 @@ fun FilterBar(
     ) {
         Icon(
             painter = painterResource(
-                id = if (state == FilterState.NOT_MARKED)
+                id = if (state == false)
                         iconNotChosen
                     else
                         iconChosen
             ),
             contentDescription = description,
-            tint = if (state == FilterState.NO_FILTER)
+            tint = if (state == null)
                         Color.Gray
                     else
                         MaterialTheme.colorScheme.onPrimary,
