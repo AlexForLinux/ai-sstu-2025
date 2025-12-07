@@ -133,7 +133,7 @@ fun ClassifyScreen(
 
             } else {
                 Text(
-                    text = "Выберите изображение для анализа ИИ-моделью",
+                    text = "Выберите изображение листа (листьев) растения вблизи для анализа ИИ-моделью",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center
