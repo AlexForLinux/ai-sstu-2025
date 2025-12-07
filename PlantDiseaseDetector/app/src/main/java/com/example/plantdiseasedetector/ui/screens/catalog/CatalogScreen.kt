@@ -37,6 +37,8 @@ fun CatalogScreen(
     viewModel: DiseaseVM = hiltViewModel())
 {
     val diseaseState by viewModel.diseaseListState.collectAsState()
+    val queryState by viewModel.queryState.collectAsState()
+    val filterState by viewModel.filterState.collectAsState()
 
     LaunchedEffect(viewModel) {
         viewModel.updateDiseaseList()
@@ -67,6 +69,7 @@ fun CatalogScreen(
                     query -> viewModel.setQuery(query)
                     viewModel.updateDiseaseList()
                 },
+                query = queryState,
                 modifier = Modifier
                     .weight(1f),
             )
@@ -77,7 +80,8 @@ fun CatalogScreen(
                 onState = {
                     filter -> viewModel.setFilter(filter)
                     viewModel.updateDiseaseList()
-                }
+                },
+                state = filterState
             )
         }
 

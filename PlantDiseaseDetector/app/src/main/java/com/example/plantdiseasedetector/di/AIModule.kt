@@ -21,7 +21,7 @@ object AIModule {
         @ApplicationContext context: Context,
     ): PlantDiseaseAI {
 
-        val modelName = "ef-net-b3-mobile.pt"
+        val modelName = "eff-net-b1-best-mobile.pt"
 
         val file = File(context.filesDir, modelName)
         if (!file.exists()) {
