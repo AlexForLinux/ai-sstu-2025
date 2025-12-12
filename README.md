@@ -9,7 +9,7 @@
 3. Разработка системы
     - исходный код: <https://github.com/AlexForLinux/ai-sstu-2025/tree/main/PlantDiseaseDetector/app>
     - android app bundle: <https://drive.google.com/drive/folders/1CNydHQ77J6tSy6Lao3UBpmNq465NU7Xt?usp=sharing>
-    - learning.ipynb: <https://github.com/AlexForLinux/ai-sstu-2025/blob/main/cnn-learning/learning.ipynb>
+    - learning.ipynb: <https://github.com/AlexForLinux/ai-sstu-2025/blob/main/cnn-learning/cnn-learning.ipynb>
 4. Выходной материал
     - текст статьи (по запросу): <https://drive.google.com/drive/folders/11CGN3O9fuGwvJG013AgJE3M_zaMQ7CBb?usp=drive_link>
 
