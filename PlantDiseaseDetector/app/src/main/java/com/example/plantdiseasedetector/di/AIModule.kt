@@ -1,8 +1,11 @@
 package com.example.plantdiseasedetector.di
 
+import ai.onnxruntime.OrtEnvironment
+import ai.onnxruntime.OrtSession
 import android.content.Context
 import com.example.plantdiseasedetector.data.datasource.local.ai.PlantDiseaseAI
-import com.example.plantdiseasedetector.data.datasource.local.ai.PlantDiseaseAIImpl
+//import com.example.plantdiseasedetector.data.datasource.local.ai.PlantDiseaseAIImpl
+import com.example.plantdiseasedetector.data.datasource.local.ai.PlantDiseaseAIOnnxImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +24,7 @@ object AIModule {
         @ApplicationContext context: Context,
     ): PlantDiseaseAI {
 
-        val modelName = "eff-net-b1-best-mobile.pt"
+        val modelName = "eff-net-b1-onnx.onnx"
 
         val file = File(context.filesDir, modelName)
         if (!file.exists()) {
@@ -32,7 +35,7 @@ object AIModule {
             }
         }
 
-        return PlantDiseaseAIImpl(
+        return PlantDiseaseAIOnnxImpl(
             file.absolutePath
         )
     }
