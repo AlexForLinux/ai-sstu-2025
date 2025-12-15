@@ -6,15 +6,16 @@
 2. Сбор данных и статистика
     - dataset.ipynb: <https://github.com/AlexForLinux/ai-sstu-2025/blob/main/dataset/dataset.ipynb>
     - colab: <https://colab.research.google.com/drive/1oMEN5bfms0DFudkMMg4GK-tEwGy_vIsL?usp=sharing>
+    - датасет: <https://drive.google.com/file/d/1uCUT_KKQZcG9dd_SnYWTy4PBv9uB-hIY/view?usp=sharing>
 3. Разработка системы
-    - исходный код: <https://github.com/AlexForLinux/ai-sstu-2025/tree/main/PlantDiseaseDetector/app>
+    - исходный код: <https://github.com/AlexForLinux/ai-sstu-2025/tree/main/PlantDiseaseDetector/app/src/main>
     - android app bundle: <https://drive.google.com/drive/folders/1CNydHQ77J6tSy6Lao3UBpmNq465NU7Xt?usp=sharing>
     - learning.ipynb: <https://github.com/AlexForLinux/ai-sstu-2025/blob/main/cnn-learning/cnn-learning.ipynb>
 4. Выходной материал
     - текст статьи (по запросу): <https://drive.google.com/drive/folders/11CGN3O9fuGwvJG013AgJE3M_zaMQ7CBb?usp=drive_link>
 
 ## О приложении
-Plant Disease Diagnoser - мобильное приложение для диагностики заболеваний растений по фотографиям с использованием искусственного интеллекта. Приложение помогает садоводам и дачникам быстро определить проблемы растений и получить рекомендации по лечению.
+Plant Disease Detector - мобильное приложение для диагностики заболеваний растений по фотографиям с использованием искусственного интеллекта. Приложение помогает садоводам и дачникам быстро определить проблемы растений и получить рекомендации по лечению.
 
 ## Основные функции
 1. Каталог заболеваний
