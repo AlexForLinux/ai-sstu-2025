@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.core.graphics.scale
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -37,7 +38,9 @@ class ImageRepositoryImpl @Inject constructor(
             val imageFile = File(imagesDir, "$fileName.jpg")
             val outputStream = FileOutputStream(imageFile)
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, outputStream)
+            bitmap
+                .scale(144, 144)
+                .compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, outputStream)
             outputStream.flush()
             outputStream.close()
 

@@ -15,9 +15,15 @@ composeBom = "2024.09.00"
 material3 = "1.4.0"
 navigationCompose = "2.9.5"
 navigationComposeVersion = "2.8.2"
+onnxruntimeAndroid = "1.23.2"
 pytorch_android = "2.1.0"
+pytorch_android_lite = "2.1.0"
+pytorch_android_native = "1.13.1"
 pytorch_android_torchvision = "2.1.0"
+pytorch_androidVersion = "1.13.1"
+pytorchNativeAuto = "2.0.0"
 room = "2.6.1"
+tensorflowLite = "2.17.0"
 
 [libraries]
 androidx-activity-compose-v193 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -44,11 +50,17 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+onnxruntime-android = { module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnxruntimeAndroid" }
+pytorch-native-auto = { module = "ai.djl.pytorch:pytorch-native-auto", version.ref = "pytorchNativeAuto" }
 pytorch_android = { module = "org.pytorch:pytorch_android", version.ref = "pytorch_android" }
+pytorch_android-v1131 = { module = "org.pytorch:pytorch_android", version.ref = "pytorch_androidVersion" }
+pytorch_android_lite = { module = "org.pytorch:pytorch_android_lite", version.ref = "pytorch_android_lite" }
+pytorch_android_native = { module = "org.pytorch:pytorch_android_native", version.ref = "pytorch_android_native" }
 pytorch_android_torchvision = { module = "org.pytorch:pytorch_android_torchvision", version.ref = "pytorch_android_torchvision" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
