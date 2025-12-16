@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Выбор способа хранения данных - ai-sstu-2025</title>
+        <title>Итоговый вывод - ai-sstu-2025</title>
 
 
         <!-- Custom HTML head -->
@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="description.html"><strong aria-hidden="true">1.</strong> Описание разрабатываемого приложения</a></li><li class="chapter-item expanded "><a href="platform-type.html"><strong aria-hidden="true">2.</strong> Выбор типа приложения</a></li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">3.</strong> Выбор архитектуры приложения</a></li><li class="chapter-item expanded "><a href="mobile-tools.html"><strong aria-hidden="true">4.</strong> Выбор средства разработки приложения</a></li><li class="chapter-item expanded "><a href="ai.html"><strong aria-hidden="true">5.</strong> Выбор технологии искусственного интеллекта</a></li><li class="chapter-item expanded "><a href="db.html" class="active"><strong aria-hidden="true">6.</strong> Выбор способа хранения данных</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="description.html"><strong aria-hidden="true">1.</strong> Описание разрабатываемого приложения</a></li><li class="chapter-item expanded "><a href="platform-type.html"><strong aria-hidden="true">2.</strong> Выбор типа приложения</a></li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">3.</strong> Выбор архитектуры приложения</a></li><li class="chapter-item expanded "><a href="mobile-tools.html"><strong aria-hidden="true">4.</strong> Выбор средства разработки приложения</a></li><li class="chapter-item expanded "><a href="ai.html"><strong aria-hidden="true">5.</strong> Выбор технологии искусственного интеллекта</a></li><li class="chapter-item expanded "><a href="conclusion.html" class="active"><strong aria-hidden="true">6.</strong> Итоговый вывод</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -172,40 +172,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="Выбор-способа-хранения-данных"><a class="header" href="#Выбор-способа-хранения-данных">Выбор способа хранения данных</a></h1>
+                        <h1 id="Итоговый-вывод-в-ходе-принятых-решений"><a class="header" href="#Итоговый-вывод-в-ходе-принятых-решений">Итоговый вывод в ходе принятых решений</a></h1>
 <hr />
-<h3 id="Контекст"><a class="header" href="#Контекст">Контекст</a></h3>
-<p>Приложение должно хранить структурированные данные локально (в оффлайн режиме) на мобильном устройстве: последние результаты классификации, отслеживаемые заболевания (заболевания, которые наиболее волнуют пользователя в данный момент), а также справочник рекомендаций по борьбе с каждым из заболеваний. Требуются быстрые локальные выборки и минимальные расходы по ресурсам.</p>
-<h3 id="Рассмотренные-варианты"><a class="header" href="#Рассмотренные-варианты">Рассмотренные варианты</a></h3>
-<ul>
-<li>Shared Preferences - это механизм хранения данных в системах Android в виде пар &quot;ключ-значение&quot; [1];</li>
-<li>Внутренний каталог хранения - каталог, который может хранить текстовые и двоичные файлы [2]; </li>
-<li>База Данных SQLite - встраиваемая реляционная СУБД [3];</li>
-</ul>
-<h3 id="Решение"><a class="header" href="#Решение">Решение</a></h3>
-<p>База Данных SQLite</p>
-<h3 id="Обоснование"><a class="header" href="#Обоснование">Обоснование</a></h3>
-<ul>
-<li>Shared Preferences предназначен для хранения небольшого набора данных в виде флагов и настроек, поэтому заметки с рекомендациями по уходу за растениями не следует в нем хранить как рекомендовано в документации для Android разработчиков [1];</li>
-<li>Внутренний каталог хранения файловой системы и Shared Preferences не поддерживают механизмы поиска и фильтрации по атрибутам, необходимые для работы с заметками, в отличие от SQLite, используеющего для этого возможности SQL [4];</li>
-<li>SQLite позволяет хранить данные в виде структурированных таблиц, так как является реляционной СУБД [3];</li>
-<li>У команды разработчиков есть опыт работы с SQLite на Android;</li>
-</ul>
-<h3 id="Последствия"><a class="header" href="#Последствия">Последствия</a></h3>
-<ul>
-<li>✅ Данные будут структурированы в виде таблиц</li>
-<li>✅ Возможность использования потенциала SQL для поисковых запросов, сортировки и фильтрации;</li>
-<li>✅ Простая интеграция с Android‑стеком (например, через библиотеку Room [5]);</li>
-<li>❌ Требуется более тщательная подготовка для использования, чем просто работа с файлами.</li>
-</ul>
-<hr />
-<h3 id="Источники"><a class="header" href="#Источники">Источники</a></h3>
+<p>В результате, рассмотрения вопросов, относящихся к вопросам архитектуры будущего приложени,были сделаны следующие выводы:</p>
 <ol>
-<li>developer.android.com - SharedPreferences [Электронный ресурс]. - URL: <a href="https://developer.android.com/reference/android/content/SharedPreferences">https://developer.android.com/reference/android/content/SharedPreferences</a></li>
-<li>developer.android.com - App data and files [Электронный ресурс]. - URL: <a href="https://developer.android.com/training/data-storage/app-specific?hl=ru">https://developer.android.com/training/data-storage/app-specific?hl=ru</a></li>
-<li>www.sqlite.org - What Is SQLite? [Электронный ресурс]. - URL: <a href="https://www.sqlite.org/">https://www.sqlite.org/</a></li>
-<li>www.sqlite.org - SQL As Understood By SQLite [Электронный ресурс]. - URL: <a href="https://www.sqlite.org/lang.html">https://www.sqlite.org/lang.html</a></li>
-<li>developer.android.com - Room [Электронный ресурс]. - URL: <a href="https://developer.android.com/jetpack/androidx/releases/room?hl=ru">https://developer.android.com/jetpack/androidx/releases/room?hl=ru</a></li>
+<li>Система распознавания заболеваний дачных растений по фотографии будет выполнена в виде мобильного Android-приложения с использованием нативного фреймворка Jetpack Compose на языке Kotlin. Это решение обеспечит эффективное использование ресурсов устройства и доступность для более 60% российских пользователей, несмотря на отсутствие поддержки iOS;</li>
+<li>Выбор в пользу монолитной архитектуры позволит обеспечить автономность приложения, повысив доступность диагностики в &quot;полевых условиях&quot;. Локальное размещение AI-модели и базы данных минимизирует зависимость от интернет-соединения, что устраняет денежные расходы на приобретение и поддержание внешних серверов, а также решает проблему с нестабильным Интернет-соединением в сельской местности;</li>
+<li>Основу интеллектуальной диагностики составит сверточная нейронная сеть (CNN), которая обеспечит высокую точность распознавания изображений при приемлемом использовании памяти устройства, несмотря на некоторую сложность архитектуры и обучения модели.</li>
 </ol>
 
                     </main>
