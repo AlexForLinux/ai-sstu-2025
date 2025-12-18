@@ -187,7 +187,7 @@ fun ClassifyScreen(
             onClick = {
                 viewModel.predict()
             },
-            enabled = viewModel.loadedBitmap != null,
+            enabled = bitmap != null,
             modifier = Modifier
                 .width(288.dp)
         ) {

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -48,16 +50,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            compilerOptions.jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
 
     buildFeatures {
         compose = true
-    }
-
-    androidResources {
-        noCompress += "pt"
     }
 }
 

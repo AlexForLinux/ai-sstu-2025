@@ -15,3 +15,5 @@ _tools/mdbook-drawio/Cargo.lock
 *.tmp
 *.bak
 *~
+PlantDiseaseDetector/app/debug/output-metadata.json
+PlantDiseaseDetector/app/debug/app-debug.apk
